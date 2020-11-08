@@ -30,7 +30,7 @@ class UserEntity(
         var lastName: String,
         var username: String,
         var password: String,
-        var token: String?,
+        var token: String? = null,
         var isExpired: Boolean = false,
         var isLocked: Boolean = false,
         var isCredentialsExpired: Boolean = false,

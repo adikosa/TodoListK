@@ -1,8 +1,6 @@
 package com.adikosa.todolistk.domain
 
-import com.adikosa.todolistk.domain.model.Priority
-import com.adikosa.todolistk.domain.model.Todo
-import com.adikosa.todolistk.domain.model.User
+import com.adikosa.todolistk.domain.model.*
 
 interface Service<T, ID> {
     fun getAll(): List<T>
@@ -14,7 +12,9 @@ interface Service<T, ID> {
     fun update(t: T, id: ID): T
 }
 
-interface UserService : Service<User, Long>
+interface UserService : Service<User, Long> {
+    fun register(registerRequest: RegisterRequest): RegisterResponse
+}
 
 interface TodoService : Service<Todo, Long> {
     fun getAllByUserId(userId: Long): List<Todo>

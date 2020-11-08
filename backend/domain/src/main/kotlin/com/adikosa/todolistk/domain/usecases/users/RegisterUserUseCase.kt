@@ -1,17 +1,17 @@
 package com.adikosa.todolistk.domain.usecases.users
 
 import com.adikosa.todolistk.domain.UserService
-import com.adikosa.todolistk.domain.model.User
+import com.adikosa.todolistk.domain.model.RegisterRequest
+import com.adikosa.todolistk.domain.model.RegisterResponse
 
 interface RegisterUserUseCase {
-    fun invoke(firstName: String, lastName: String, username: String, password: String): User
+    fun invoke(registerRequest: RegisterRequest): RegisterResponse
 }
 
 class RegisterUserUseCaseImpl(
         private val userService: UserService
 ) : RegisterUserUseCase {
-    override fun invoke(firstName: String, lastName: String, username: String, password: String): User {
-        // TODO: 07-Nov-20 modify later 
-        return userService.save(User(0L, firstName, lastName, username, password, null))
+    override fun invoke(registerRequest: RegisterRequest): RegisterResponse {
+        return userService.register(registerRequest)
     }
 }

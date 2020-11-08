@@ -1,4 +1,4 @@
-package com.adikosa.todolistk.app.model
+package com.adikosa.todolistk.domain.model
 
 data class RegisterRequest(
         var firstName: String,
@@ -8,8 +8,6 @@ data class RegisterRequest(
 )
 
 data class RegisterResponse(
-        var firstName: String,
-        var lastName: String,
-        var username: String,
+        var id: Long?,
         var token: String?
 )
