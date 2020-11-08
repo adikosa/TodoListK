@@ -3,6 +3,7 @@ import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import * as TodoRepository from '../../data/repos/TodoRepository';
 import {PrivateRoute} from "../PrivateRoute";
 import {LoginPage} from "../../LoginPage";
+import {RegisterPage} from "../../RegisterPage";
 import { createBrowserHistory } from 'history';
 
 export const history = createBrowserHistory();
@@ -28,7 +29,7 @@ class App extends React.Component {
                             <Switch>
                                 {/*<PrivateRoute exact path="/" component={HomePage} />*/}
                                 <Route path="/login" component={LoginPage} />
-                                {/*<Route path="/register" component={RegisterPage} />*/}
+                                <Route path="/register" component={RegisterPage} />
                                 <Redirect from="*" to="/" />
                             </Switch>
                         </Router>
