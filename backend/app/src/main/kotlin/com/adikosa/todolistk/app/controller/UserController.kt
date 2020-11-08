@@ -1,6 +1,8 @@
 package com.adikosa.todolistk.app.controller
 
 import com.adikosa.todolistk.app.model.*
+import com.adikosa.todolistk.domain.model.RegisterRequest
+import com.adikosa.todolistk.domain.model.RegisterResponse
 import com.adikosa.todolistk.domain.usecases.users.DeleteUserUseCase
 import com.adikosa.todolistk.domain.usecases.users.RegisterUserUseCase
 import org.springframework.web.bind.annotation.*
@@ -13,14 +15,7 @@ class UserController(
 ) {
     @PostMapping("/register")
     fun register(@RequestBody registerRequest: RegisterRequest): RegisterResponse {
-        val user = registerUserUseCase.invoke(
-                registerRequest.firstName,
-                registerRequest.lastName,
-                registerRequest.firstName,
-                registerRequest.password
-        )
-
-        return RegisterResponse(user.firstName, user.lastName, user.username, user.token)
+        return registerUserUseCase.invoke(registerRequest)
     }
 
     @PostMapping("/login")
