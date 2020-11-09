@@ -1,9 +1,25 @@
 package com.adikosa.todolistk.app.di
 
-import com.adikosa.todolistk.domain.TodoService
-import com.adikosa.todolistk.domain.UserService
-import com.adikosa.todolistk.domain.usecases.todos.*
-import com.adikosa.todolistk.domain.usecases.users.*
+import com.adikosa.todolistk.domain.services.PasswordManager
+import com.adikosa.todolistk.domain.services.TodoService
+import com.adikosa.todolistk.domain.services.UserService
+import com.adikosa.todolistk.domain.usecases.todos.DeleteTodoUseCase
+import com.adikosa.todolistk.domain.usecases.todos.DeleteTodoUseCaseImpl
+import com.adikosa.todolistk.domain.usecases.todos.EditTodoUseCase
+import com.adikosa.todolistk.domain.usecases.todos.EditTodoUseCaseImpl
+import com.adikosa.todolistk.domain.usecases.todos.GetUserTodosUseCase
+import com.adikosa.todolistk.domain.usecases.todos.GetUserTodosUseCaseImpl
+import com.adikosa.todolistk.domain.usecases.todos.SaveTodoUseCase
+import com.adikosa.todolistk.domain.usecases.todos.SaveTodoUseCaseImpl
+import com.adikosa.todolistk.domain.usecases.users.DeleteUserUseCase
+import com.adikosa.todolistk.domain.usecases.users.DeleteUserUseCaseImpl
+import com.adikosa.todolistk.domain.usecases.users.GetUserUseCase
+import com.adikosa.todolistk.domain.usecases.users.GetUserUseCaseImpl
+import com.adikosa.todolistk.domain.usecases.users.GetUsersUseCase
+import com.adikosa.todolistk.domain.usecases.users.GetUsersUseCaseImpl
+import com.adikosa.todolistk.domain.usecases.users.LoginUserUseCase
+import com.adikosa.todolistk.domain.usecases.users.RegisterUserUseCase
+import com.adikosa.todolistk.domain.usecases.users.RegisterUserUseCaseImpl
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.context.annotation.Bean
@@ -17,6 +33,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 @ComponentScan(basePackages = ["com.adikosa.todolistk.storage"])
 @EnableJpaRepositories(basePackages = ["com.adikosa.todolistk.storage"])
 open class BeansConfiguration {
+
+    @Bean
+    open fun providePasswordService(): PasswordManager {
+        return SpringPasswordManager(10)
+    }
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -44,7 +65,15 @@ open class BeansConfiguration {
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    open fun registerUserUseCaseFactory(userService: UserService): RegisterUserUseCase = RegisterUserUseCaseImpl(userService)
+    open fun registerUserUseCaseFactory(passwordManager: PasswordManager, userService: UserService): RegisterUserUseCase {
+        return RegisterUserUseCaseImpl(passwordManager, userService)
+    }
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    open fun loginUserUseCase(passwordManager: PasswordManager, userService: UserService): LoginUserUseCase {
+        TODO()
+    }
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)

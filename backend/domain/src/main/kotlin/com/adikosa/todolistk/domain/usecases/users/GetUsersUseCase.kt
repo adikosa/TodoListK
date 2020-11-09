@@ -1,7 +1,6 @@
 package com.adikosa.todolistk.domain.usecases.users
 
 import com.adikosa.todolistk.domain.UserService
-import com.adikosa.todolistk.domain.model.User
 
 interface GetUsersUseCase {
     fun invoke(): List<User>

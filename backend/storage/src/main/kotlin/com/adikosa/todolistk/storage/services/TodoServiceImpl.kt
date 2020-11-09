@@ -1,8 +1,11 @@
 package com.adikosa.todolistk.storage.services
 
-import com.adikosa.todolistk.domain.TodoService
-import com.adikosa.todolistk.domain.model.Todo
-import com.adikosa.todolistk.storage.*
+import com.adikosa.todolistk.domain.services.TodoService
+import com.adikosa.todolistk.storage.PriorityRepository
+import com.adikosa.todolistk.storage.TodoEntity
+import com.adikosa.todolistk.storage.TodoRepository
+import com.adikosa.todolistk.storage.UserRepository
+import com.adikosa.todolistk.storage.toDomain
 import org.springframework.stereotype.Service
 
 @Service("todoService")

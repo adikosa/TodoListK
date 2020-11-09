@@ -1,11 +1,15 @@
 package com.adikosa.todolistk.storage
 
-import com.adikosa.todolistk.domain.model.Priority
-import org.springframework.data.jpa.repository.JpaRepository
+import com.adikosa.todolistk.storage.entities.PriorityEntity
+import com.adikosa.todolistk.storage.entities.TodoEntity
+import com.adikosa.todolistk.storage.entities.UserEntity
 import java.util.*
+import org.springframework.data.jpa.repository.JpaRepository
+
 
 interface UserRepository : JpaRepository<UserEntity, Long> {
-
+    fun existsByEmail(email: String): Boolean
+    fun findByEmail(email: String): Optional<UserEntity>
 }
 
 interface TodoRepository : JpaRepository<TodoEntity, Long> {
