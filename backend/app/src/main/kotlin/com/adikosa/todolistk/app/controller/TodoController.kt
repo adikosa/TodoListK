@@ -1,6 +1,5 @@
 package com.adikosa.todolistk.app.controller
 
-import com.adikosa.todolistk.domain.model.Todo
 import com.adikosa.todolistk.domain.usecases.todos.DeleteTodoUseCase
 import com.adikosa.todolistk.domain.usecases.todos.EditTodoUseCase
 import com.adikosa.todolistk.domain.usecases.todos.GetUserTodosUseCase

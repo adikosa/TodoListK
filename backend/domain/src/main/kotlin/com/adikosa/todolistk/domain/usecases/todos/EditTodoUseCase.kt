@@ -1,7 +1,6 @@
 package com.adikosa.todolistk.domain.usecases.todos
 
 import com.adikosa.todolistk.domain.TodoService
-import com.adikosa.todolistk.domain.model.Todo
 
 interface EditTodoUseCase {
     fun invoke(todo: Todo, todoId: Long): Todo
