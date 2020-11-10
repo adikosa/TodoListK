@@ -1,5 +1,7 @@
 package com.adikosa.todolistk.app.di
 
+import com.adikosa.todolistk.domain.services.AuthManager
+import com.adikosa.todolistk.domain.services.JwtTokenManager
 import com.adikosa.todolistk.domain.services.PasswordManager
 import com.adikosa.todolistk.domain.services.TodoService
 import com.adikosa.todolistk.domain.services.UserService
@@ -18,8 +20,10 @@ import com.adikosa.todolistk.domain.usecases.users.GetUserUseCaseImpl
 import com.adikosa.todolistk.domain.usecases.users.GetUsersUseCase
 import com.adikosa.todolistk.domain.usecases.users.GetUsersUseCaseImpl
 import com.adikosa.todolistk.domain.usecases.users.LoginUserUseCase
+import com.adikosa.todolistk.domain.usecases.users.LoginUserUseCaseImpl
 import com.adikosa.todolistk.domain.usecases.users.RegisterUserUseCase
 import com.adikosa.todolistk.domain.usecases.users.RegisterUserUseCaseImpl
+import java.util.*
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.context.annotation.Bean
@@ -33,6 +37,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 @ComponentScan(basePackages = ["com.adikosa.todolistk.storage"])
 @EnableJpaRepositories(basePackages = ["com.adikosa.todolistk.storage"])
 open class BeansConfiguration {
+
+    @Bean
+    open fun provideBase64Encoder(): Base64.Encoder {
+        return Base64.getEncoder()
+    }
 
     @Bean
     open fun providePasswordService(): PasswordManager {
@@ -65,14 +74,16 @@ open class BeansConfiguration {
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    open fun registerUserUseCaseFactory(passwordManager: PasswordManager, userService: UserService): RegisterUserUseCase {
-        return RegisterUserUseCaseImpl(passwordManager, userService)
+    open fun registerUserUseCaseFactory(passwordManager: PasswordManager, jwtTokenManager: JwtTokenManager,
+                                        userService: UserService): RegisterUserUseCase {
+        return RegisterUserUseCaseImpl(passwordManager, jwtTokenManager, userService)
     }
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    open fun loginUserUseCase(passwordManager: PasswordManager, userService: UserService): LoginUserUseCase {
-        TODO()
+    open fun loginUserUseCase(jwtTokenManager: JwtTokenManager, userService: UserService,
+                              authManager: AuthManager): LoginUserUseCase {
+        return LoginUserUseCaseImpl(jwtTokenManager, userService, authManager)
     }
 
     @Bean

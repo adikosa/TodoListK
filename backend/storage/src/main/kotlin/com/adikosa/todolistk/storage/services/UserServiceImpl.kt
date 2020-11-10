@@ -4,7 +4,6 @@ import com.adikosa.todolistk.domain.model.RegisterData
 import com.adikosa.todolistk.domain.services.UserService
 import com.adikosa.todolistk.storage.UserRepository
 import com.adikosa.todolistk.storage.entities.UserEntity
-import java.util.*
 import org.springframework.stereotype.Service
 
 @Service("userService")
@@ -22,20 +21,19 @@ class UserServiceImpl(
 //        return save(user)
 //    }
 
-    override fun save(registerData: RegisterData): UUID {
+    override fun save(registerData: RegisterData): String {
         val savedUser = with(registerData) {
             userRepository.save(UserEntity(firstName, lastName, email, password))
         }
-
-        return savedUser.id
+        return savedUser.id.toString()
     }
 
     override fun isEmailTaken(email: String): Boolean {
         return userRepository.existsByEmail(email)
     }
 
-    override fun findByEmail(email: String) {
-        TODO("Not yet implemented")
+    override fun findByEmail(email: String): String {
+        return userRepository.findByEmail(email).orElseThrow().id.toString()
     }
 }
 

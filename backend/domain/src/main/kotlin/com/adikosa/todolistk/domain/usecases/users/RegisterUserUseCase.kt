@@ -3,6 +3,7 @@ package com.adikosa.todolistk.domain.usecases.users
 import com.adikosa.todolistk.domain.exceptions.EmailAlreadyTakenException
 import com.adikosa.todolistk.domain.model.RegisterData
 import com.adikosa.todolistk.domain.model.TokenResult
+import com.adikosa.todolistk.domain.services.JwtTokenManager
 import com.adikosa.todolistk.domain.services.PasswordManager
 import com.adikosa.todolistk.domain.services.UserService
 
@@ -12,6 +13,7 @@ interface RegisterUserUseCase {
 
 class RegisterUserUseCaseImpl(
         private val passwordManager: PasswordManager,
+        private val jwtTokenManager: JwtTokenManager,
         private val userService: UserService
 ) : RegisterUserUseCase {
     override fun invoke(registerData: RegisterData): TokenResult {
@@ -21,9 +23,9 @@ class RegisterUserUseCaseImpl(
         }
 
         registerData.password = passwordManager.encode(registerData.password)!!
-        val userUUID = userService.save(registerData)
-        val token = "createToken"
+        val uuid = userService.save(registerData)
+        val token = jwtTokenManager.createToken(uuid)
 
-        return TokenResult(userUUID, token)
+        return TokenResult(uuid, token)
     }
 }

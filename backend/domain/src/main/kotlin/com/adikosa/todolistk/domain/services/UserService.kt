@@ -1,10 +1,9 @@
 package com.adikosa.todolistk.domain.services
 
 import com.adikosa.todolistk.domain.model.RegisterData
-import java.util.*
 
 interface UserService {
-    fun save(registerData: RegisterData): UUID
+    fun save(registerData: RegisterData): String
     fun isEmailTaken(email: String): Boolean
-    fun findByEmail(email: String)
+    fun findByEmail(email: String): String
 }

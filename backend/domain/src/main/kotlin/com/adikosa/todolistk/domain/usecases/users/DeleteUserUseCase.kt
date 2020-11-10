@@ -1,6 +1,7 @@
 package com.adikosa.todolistk.domain.usecases.users
 
-import com.adikosa.todolistk.domain.UserService
+import com.adikosa.todolistk.domain.services.UserService
+
 
 interface DeleteUserUseCase {
     fun invoke(id: Long): Boolean
