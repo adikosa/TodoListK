@@ -27,11 +27,12 @@ class UserController(
 
     @PostMapping("/login")
     fun login(@RequestBody loginData: LoginData): TokenResult {
-        loginUserUseCase.invoke(loginData)
-        TODO("07-Nov-20 finish later")
+        return loginUserUseCase.invoke(loginData)
     }
 
     @DeleteMapping("/{id}")
-    fun deleteById(@PathVariable id: Long) = deleteUserUseCase.invoke(id)
+    fun deleteById(@PathVariable id: Long) {
+        deleteUserUseCase.invoke(id)
+    }
 
 }

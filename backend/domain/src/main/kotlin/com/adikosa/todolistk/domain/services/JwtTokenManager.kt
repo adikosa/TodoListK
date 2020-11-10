@@ -1,7 +1,5 @@
 package com.adikosa.todolistk.domain.services
 
 interface JwtTokenManager {
-
-    fun initialize()
-
+    fun createToken(uuid: String): String
 }
