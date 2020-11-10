@@ -8,3 +8,8 @@ spring:
     username: sa
     password:
     driverClassName: org.h2.Driver
+
+security:
+  jwt:
+    token:
+      secret-key: secret
