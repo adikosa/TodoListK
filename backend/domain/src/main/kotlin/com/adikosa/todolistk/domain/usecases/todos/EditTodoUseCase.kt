@@ -1,16 +1,17 @@
 package com.adikosa.todolistk.domain.usecases.todos
 
-import com.adikosa.todolistk.domain.TodoService
+import com.adikosa.todolistk.domain.model.TodoData
+import com.adikosa.todolistk.domain.services.TodoService
 
 interface EditTodoUseCase {
-    fun invoke(todo: Todo, todoId: Long): Todo
+    fun invoke(todo: TodoData, todoUUID: String): TodoData
 }
 
 class EditTodoUseCaseImpl(
-        private val todoService: TodoService
+    private val todoService: TodoService
 ) : EditTodoUseCase {
-    override fun invoke(todo: Todo, todoId: Long): Todo {
-        // TODO: 07-Nov-20 finish later
+    override fun invoke(todo: TodoData, todoUUID: String): TodoData {
         return todoService.save(todo)
     }
+
 }

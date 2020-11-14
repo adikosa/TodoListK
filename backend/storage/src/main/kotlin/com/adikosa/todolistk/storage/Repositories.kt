@@ -7,15 +7,17 @@ import java.util.*
 import org.springframework.data.jpa.repository.JpaRepository
 
 
-interface UserRepository : JpaRepository<UserEntity, Long> {
+interface UserRepository : JpaRepository<UserEntity, UUID> {
     fun existsByEmail(email: String): Boolean
     fun findByEmail(email: String): Optional<UserEntity>
+    fun existsByUsername(username: String): Boolean
+    fun findByUsername(username: String): Optional<UserEntity>
 }
 
-interface TodoRepository : JpaRepository<TodoEntity, Long> {
-    fun findAllByUser_Id(userId: Long): List<TodoEntity>
+interface TodoRepository : JpaRepository<TodoEntity, UUID> {
+    fun findAllByUser_Id(uuid: UUID): List<TodoEntity>
 }
 
-interface PriorityRepository : JpaRepository<PriorityEntity, Long> {
+interface PriorityRepository : JpaRepository<PriorityEntity, UUID> {
     fun findByName(name: String): Optional<PriorityEntity>
 }

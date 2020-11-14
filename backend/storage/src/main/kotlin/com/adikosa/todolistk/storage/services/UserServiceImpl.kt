@@ -10,20 +10,9 @@ import org.springframework.stereotype.Service
 class UserServiceImpl(
         private val userRepository: UserRepository
 ) : UserService {
-//    override fun getAll(): List<User> = userRepository.findAll().toDomain()
-//    override fun getById(id: Long): User = userRepository.findById(id).orElseThrow().toDomain()
-//    override fun save(user: User): User = userRepository.save(user.toEntity()).toDomain()
-//    override fun save(users: List<User>): List<User> = userRepository.saveAll(users.toEntity()).toDomain()
-//    override fun existsById(id: Long): Boolean = userRepository.existsById(id)
-//    override fun deleteById(id: Long) = userRepository.deleteById(id)
-//    override fun update(user: User, id: Long): User {
-//        // TODO: 07-Nov-20 finish later
-//        return save(user)
-//    }
-
     override fun save(registerData: RegisterData): String {
         val savedUser = with(registerData) {
-            userRepository.save(UserEntity(firstName, lastName, email, password))
+            userRepository.save(UserEntity(firstName, lastName, username, email, password))
         }
         return savedUser.id.toString()
     }
@@ -32,8 +21,16 @@ class UserServiceImpl(
         return userRepository.existsByEmail(email)
     }
 
+    override fun findByUsername(username: String): String {
+        return userRepository.findByUsername(username).orElseThrow().id.toString()
+    }
+
     override fun findByEmail(email: String): String {
         return userRepository.findByEmail(email).orElseThrow().id.toString()
+    }
+
+    override fun isUsernameTaken(username: String): Boolean {
+        return userRepository.existsByUsername(username)
     }
 }
 
