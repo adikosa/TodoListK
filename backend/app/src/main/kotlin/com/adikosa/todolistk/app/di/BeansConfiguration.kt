@@ -13,12 +13,12 @@ import com.adikosa.todolistk.domain.usecases.todos.GetUserTodosUseCase
 import com.adikosa.todolistk.domain.usecases.todos.GetUserTodosUseCaseImpl
 import com.adikosa.todolistk.domain.usecases.todos.SaveTodoUseCase
 import com.adikosa.todolistk.domain.usecases.todos.SaveTodoUseCaseImpl
-import com.adikosa.todolistk.domain.usecases.users.DeleteUserUseCase
-import com.adikosa.todolistk.domain.usecases.users.DeleteUserUseCaseImpl
-import com.adikosa.todolistk.domain.usecases.users.GetUserUseCase
-import com.adikosa.todolistk.domain.usecases.users.GetUserUseCaseImpl
-import com.adikosa.todolistk.domain.usecases.users.GetUsersUseCase
-import com.adikosa.todolistk.domain.usecases.users.GetUsersUseCaseImpl
+//import com.adikosa.todolistk.domain.usecases.users.DeleteUserUseCase
+//import com.adikosa.todolistk.domain.usecases.users.DeleteUserUseCaseImpl
+//import com.adikosa.todolistk.domain.usecases.users.GetUserUseCase
+//import com.adikosa.todolistk.domain.usecases.users.GetUserUseCaseImpl
+//import com.adikosa.todolistk.domain.usecases.users.GetUsersUseCase
+//import com.adikosa.todolistk.domain.usecases.users.GetUsersUseCaseImpl
 import com.adikosa.todolistk.domain.usecases.users.LoginUserUseCase
 import com.adikosa.todolistk.domain.usecases.users.LoginUserUseCaseImpl
 import com.adikosa.todolistk.domain.usecases.users.RegisterUserUseCase
@@ -31,6 +31,11 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Scope
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 
 @Configuration
 @EntityScan(basePackages = ["com.adikosa.todolistk.storage"])
@@ -39,13 +44,23 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 open class BeansConfiguration {
 
     @Bean
+    open fun provideAuthManager(authenticationManager: AuthenticationManager, userDetailsService: UserDetailsService): AuthManager {
+        return SpringAuthManager(authenticationManager, userDetailsService, SecurityContextHolder.getContext())
+    }
+
+    @Bean
     open fun provideBase64Encoder(): Base64.Encoder {
         return Base64.getEncoder()
     }
 
     @Bean
-    open fun providePasswordService(): PasswordManager {
-        return SpringPasswordManager(10)
+    open fun providePasswordEncoder(): PasswordEncoder {
+        return BCryptPasswordEncoder(10)
+    }
+
+    @Bean
+    open fun providePasswordManager(passwordEncoder: PasswordEncoder): PasswordManager {
+        return SpringPasswordManager(passwordEncoder)
     }
 
     @Bean
@@ -64,13 +79,13 @@ open class BeansConfiguration {
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     open fun deleteTodoUseCaseFactory(todoService: TodoService): DeleteTodoUseCase = DeleteTodoUseCaseImpl(todoService)
 
-    @Bean
-    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    open fun getUserUseCaseFactory(userService: UserService): GetUserUseCase = GetUserUseCaseImpl(userService)
-
-    @Bean
-    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    open fun getUsersUseCaseFactory(userService: UserService): GetUsersUseCase = GetUsersUseCaseImpl(userService)
+//    @Bean
+//    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+//    open fun getUserUseCaseFactory(userService: UserService): GetUserUseCase = GetUserUseCaseImpl(userService)
+//
+//    @Bean
+//    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+//    open fun getUsersUseCaseFactory(userService: UserService): GetUsersUseCase = GetUsersUseCaseImpl(userService)
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -86,7 +101,7 @@ open class BeansConfiguration {
         return LoginUserUseCaseImpl(jwtTokenManager, userService, authManager)
     }
 
-    @Bean
-    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    open fun deleteUserUseCaseFactory(userService: UserService): DeleteUserUseCase = DeleteUserUseCaseImpl(userService)
+//    @Bean
+//    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+//    open fun deleteUserUseCaseFactory(userService: UserService): DeleteUserUseCase = DeleteUserUseCaseImpl(userService)
 }

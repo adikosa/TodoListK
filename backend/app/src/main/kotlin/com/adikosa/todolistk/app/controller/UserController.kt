@@ -3,11 +3,8 @@ package com.adikosa.todolistk.app.controller
 import com.adikosa.todolistk.domain.model.LoginData
 import com.adikosa.todolistk.domain.model.RegisterData
 import com.adikosa.todolistk.domain.model.TokenResult
-import com.adikosa.todolistk.domain.usecases.users.DeleteUserUseCase
 import com.adikosa.todolistk.domain.usecases.users.LoginUserUseCase
 import com.adikosa.todolistk.domain.usecases.users.RegisterUserUseCase
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -17,8 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/users")
 class UserController(
         private val registerUserUseCase: RegisterUserUseCase,
-        private val loginUserUseCase: LoginUserUseCase,
-        private val deleteUserUseCase: DeleteUserUseCase
+        private val loginUserUseCase: LoginUserUseCase
 ) {
     @PostMapping("/register")
     fun register(@RequestBody registerData: RegisterData): TokenResult {
@@ -30,9 +26,9 @@ class UserController(
         return loginUserUseCase.invoke(loginData)
     }
 
-    @DeleteMapping("/{id}")
-    fun deleteById(@PathVariable id: Long) {
-        deleteUserUseCase.invoke(id)
-    }
+//    @DeleteMapping("/{id}")
+//    fun deleteById(@PathVariable id: Long) {
+//        deleteUserUseCase.invoke(id)
+//    }
 
 }

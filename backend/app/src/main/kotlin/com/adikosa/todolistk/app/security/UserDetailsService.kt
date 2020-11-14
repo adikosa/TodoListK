@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service
 @Service("userDetailsService")
 class UserDetailsServiceImpl(private val userRepository: UserRepository) : UserDetailsService {
 
-    override fun loadUserByUsername(email: String): UserDetails {
-        val user = userRepository.findByEmail(email).orElseThrow()
+    override fun loadUserByUsername(username: String): UserDetails {
+        val user = userRepository.findByUsername(username).orElseThrow()
         return UserDetailsImpl(user)
     }
 }
@@ -20,10 +20,10 @@ class UserDetailsServiceImpl(private val userRepository: UserRepository) : UserD
 class UserDetailsImpl(private val userEntity: UserEntity) : UserDetails {
 
     override fun getAuthorities(): Collection<GrantedAuthority> {
-        return userEntity.roles.map { SimpleGrantedAuthority(it.name) }
+        return userEntity.roles.map { SimpleGrantedAuthority( it.name) }
     }
 
-    override fun getUsername() = userEntity.email
+    override fun getUsername() = userEntity.username
     override fun getPassword() = userEntity.password
 
     override fun isCredentialsNonExpired() = !userEntity.isCredentialsExpired

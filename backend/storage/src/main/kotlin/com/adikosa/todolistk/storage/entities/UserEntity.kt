@@ -12,11 +12,11 @@ import javax.persistence.Table
 class UserEntity(
         var firstName: String,
         var lastName: String,
+        val username: String,
         var email: String,
         var password: String,
         @OneToMany(fetch = FetchType.EAGER)
         var roles: Set<RoleEntity> = emptySet(),
-        var token: String? = null,
         var isExpired: Boolean = false,
         var isLocked: Boolean = false,
         var isCredentialsExpired: Boolean = false,
