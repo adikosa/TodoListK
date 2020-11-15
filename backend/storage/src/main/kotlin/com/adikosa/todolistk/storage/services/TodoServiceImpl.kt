@@ -6,7 +6,8 @@ import com.adikosa.todolistk.storage.PriorityRepository
 import com.adikosa.todolistk.storage.TodoRepository
 import com.adikosa.todolistk.storage.UserRepository
 import com.adikosa.todolistk.storage.entities.TodoEntity
-import java.util.*
+import com.adikosa.todolistk.storage.toUUID
+import kotlin.RuntimeException
 import org.springframework.stereotype.Service
 
 @Service("todoService")
@@ -15,29 +16,44 @@ class TodoServiceImpl(
         private val priorityRepository: PriorityRepository,
         private val userRepository: UserRepository
 ) : TodoService {
-    override fun existsById(uuid: String): Boolean {
-        return false
+    override fun existsById(todoId: String): Boolean {
+        return todoRepository.existsById(todoId.toUUID())
     }
 
-    override fun getAllByUserId(userUUID: String): List<TodoData> {
-        return todoRepository.findAllByUser_Id(UUID.fromString(userUUID)).toDomain()
+    override fun findAllByUserId(userId: String): List<TodoData> {
+        return todoRepository.findAllByUser_Id(userId.toUUID()).toDomain()
     }
 
-    //    override fun getAllByUserId(userId: Long): List<Todo> = todoRepository.findAllByUser_Id(userId).toDomain()
-//    override fun getAll(): List<Todo> = todoRepository.findAll().toDomain()
-//    override fun getById(id: Long): Todo = todoRepository.findById(id).orElseThrow().toDomain()
-//    override fun save(todo: Todo): Todo = todoRepository.save(todo.toEntity()).toDomain()
-//    override fun save(todos: List<Todo>): List<Todo> = todoRepository.saveAll(todos.toEntity()).toDomain()
-//    override fun existsById(id: Long): Boolean = todoRepository.existsById(id)
-//    override fun deleteById(id: Long) = todoRepository.deleteById(id)
-
-    override fun save(todo: TodoData): TodoData {
-        TODO("Not yet implemented")
+    override fun save(todoData: TodoData): TodoData {
+        val todo = todoData.toEntity()
+        return todoRepository.save(todo).toDomain()
     }
-//    override fun update(todo: Todo, id: Long): Todo {
-//        // TODO: 07-Nov-20 finish later
-//        return save(todo)
-//    }
+
+    override fun isUserTodoCreator(userId: String, todoId: String): Boolean {
+        return todoRepository.existsByIdAndUser_Id(todoId.toUUID(), userId.toUUID())
+    }
+
+    override fun deleteById(todoId: String) {
+        todoRepository.deleteById(todoId.toUUID())
+    }
+
+    override fun update(todoData: TodoData, todoId: String): TodoData {
+        val todo = todoRepository.findById(todoId.toUUID()).orElseThrow { RuntimeException("Todo not found") }
+        val todoPriority = priorityRepository.findByName(todoData.priority!!)?: throw RuntimeException("Priority $todoData.priority!! not found")
+        todo.apply {
+            title = todoData.title
+            description = todoData.description
+            dueDateTime = todoData.dueDateTime
+            priority = todoPriority
+        }
+        return todoRepository.save(todo).toDomain()
+    }
+
+    private fun TodoData.toEntity(): TodoEntity {
+        val user = userRepository.findById(userId.toUUID()).orElseThrow { RuntimeException("User not found") }
+        val priority = priorityRepository.findByName(priority!!)?: throw RuntimeException("Priority $priority!! not found")
+        return TodoEntity(title, description, dueDateTime, user, priority)
+    }
 }
 
 fun List<TodoEntity>.toDomain(): List<TodoData> {

@@ -9,12 +9,8 @@ import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 
 @MappedSuperclass
-abstract class AbstractEntity {
-    @Id
-    @GeneratedValue
-    lateinit var id: UUID
-    @CreationTimestamp
-    lateinit var createdAt: LocalDateTime
-    @UpdateTimestamp
-    lateinit var updatedAt: LocalDateTime
-}
+abstract class AbstractEntity(
+        @Id @GeneratedValue var id: UUID? = null,
+        @CreationTimestamp var createdAt: LocalDateTime? = null,
+        @UpdateTimestamp var updatedAt: LocalDateTime? = null
+)

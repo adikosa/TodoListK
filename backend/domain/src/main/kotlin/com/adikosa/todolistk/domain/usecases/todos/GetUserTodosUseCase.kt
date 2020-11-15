@@ -11,6 +11,6 @@ class GetUserTodosUseCaseImpl(
      private val todoService: TodoService
 ) : GetUserTodosUseCase {
     override fun invoke(userUUID: String): List<TodoData> {
-        return todoService.getAllByUserId(userUUID)
+        return todoService.findAllByUserId(userUUID)
     }
 }
