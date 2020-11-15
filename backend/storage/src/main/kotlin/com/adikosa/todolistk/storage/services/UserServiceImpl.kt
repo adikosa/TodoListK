@@ -4,6 +4,7 @@ import com.adikosa.todolistk.domain.model.RegisterData
 import com.adikosa.todolistk.domain.services.UserService
 import com.adikosa.todolistk.storage.UserRepository
 import com.adikosa.todolistk.storage.entities.UserEntity
+import java.lang.RuntimeException
 import org.springframework.stereotype.Service
 
 @Service("userService")
@@ -21,12 +22,14 @@ class UserServiceImpl(
         return userRepository.existsByEmail(email)
     }
 
-    override fun findByUsername(username: String): String {
-        return userRepository.findByUsername(username).orElseThrow().id.toString()
+    override fun findIdByUsername(username: String): String {
+        val user = userRepository.findByUsername(username)?: throw RuntimeException()
+        return user.id.toString()
     }
 
-    override fun findByEmail(email: String): String {
-        return userRepository.findByEmail(email).orElseThrow().id.toString()
+    override fun findIdByEmail(email: String): String {
+        val user = userRepository.findByEmail(email)?: throw RuntimeException()
+        return user.id.toString()
     }
 
     override fun isUsernameTaken(username: String): Boolean {

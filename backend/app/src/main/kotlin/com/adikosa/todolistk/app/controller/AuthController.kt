@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/users")
-class UserController(
+@RequestMapping("/api")
+class AuthController(
         private val registerUserUseCase: RegisterUserUseCase,
         private val loginUserUseCase: LoginUserUseCase
 ) {
@@ -25,10 +25,4 @@ class UserController(
     fun login(@RequestBody loginData: LoginData): TokenResult {
         return loginUserUseCase.invoke(loginData)
     }
-
-//    @DeleteMapping("/{id}")
-//    fun deleteById(@PathVariable id: Long) {
-//        deleteUserUseCase.invoke(id)
-//    }
-
 }

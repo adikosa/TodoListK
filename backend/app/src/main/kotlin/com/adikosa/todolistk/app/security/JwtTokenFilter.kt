@@ -22,19 +22,17 @@ class JwtTokenFilter(
         val httpServletRequest = request as HttpServletRequest
         val bearerToken = getBearerToken(httpServletRequest)
 
-        if (tokenManager.isValid(bearerToken)) {
+        if (bearerToken != null) {
+            tokenManager.validate(bearerToken)
             val username = tokenManager.getUsername(bearerToken)
             authManager.authenticate(username)
-        } else {
-            throw RuntimeException("Invalid JwtToken provided")
         }
 
         chain?.doFilter(request, response)
     }
 
-    private fun getBearerToken(httpServletRequest: HttpServletRequest): String {
-        val bearerToken: String = httpServletRequest.getHeader(AUTHORIZATION_HEADER)
-                ?: throw RuntimeException("No Authorization Header provided")
+    private fun getBearerToken(httpServletRequest: HttpServletRequest): String? {
+        val bearerToken: String = httpServletRequest.getHeader(AUTHORIZATION_HEADER) ?: return null
 
         if (!bearerToken.startsWith(BEARER_TOKEN_PREFIX)) {
             throw RuntimeException("Invalid Bearer token")

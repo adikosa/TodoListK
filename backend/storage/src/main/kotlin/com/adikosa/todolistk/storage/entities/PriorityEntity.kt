@@ -9,6 +9,5 @@ import javax.persistence.Table
 @Entity
 @Table(name = "priorities")
 data class PriorityEntity(
-        @Column(nullable = false)
-        var name: String
+        @Column(nullable = false) var name: String
 ) : AbstractEntity()

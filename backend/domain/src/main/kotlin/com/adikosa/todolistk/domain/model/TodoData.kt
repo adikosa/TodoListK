@@ -3,11 +3,11 @@ package com.adikosa.todolistk.domain.model
 import java.time.LocalDateTime
 
 data class TodoData(
-        var uuid: String?,
+        var id: String?,
         var title: String,
         var description: String,
         var dueDateTime: LocalDateTime,
-        var userUUID: String,
+        var userId: String,
         var priority: String?,
-        var createdAt: LocalDateTime
+        var createdAt: LocalDateTime?
 )

@@ -18,7 +18,7 @@ class LoginUserUseCaseImpl(
     override fun invoke(loginData: LoginData): TokenResult {
         authManager.authenticate(loginData)
 
-        val uuid = userService.findByUsername(loginData.username)
+        val uuid = userService.findIdByUsername(loginData.username)
         val token = jwtTokenManager.createToken(uuid)
         return TokenResult(uuid, token)
     }

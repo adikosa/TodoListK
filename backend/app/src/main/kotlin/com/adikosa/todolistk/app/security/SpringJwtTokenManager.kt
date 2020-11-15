@@ -7,6 +7,7 @@ import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jws
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
+import java.lang.RuntimeException
 import java.util.*
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -33,9 +34,11 @@ class SpringJwtTokenManager(
         }.compact()
     }
 
-    override fun isValid(token: String): Boolean {
+    override fun validate(token: String) {
         val claims = getClaims(token)
-        return claims.body.expiration.after(dateProvider.now())
+        if (claims.body.expiration.before(dateProvider.now())) {
+            throw RuntimeException("Invalid Jwt Token")
+        }
     }
 
     override fun getUsername(token: String): String {
