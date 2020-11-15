@@ -17,11 +17,8 @@ class SpringJwtTokenManager(
         private val dateProvider: DateProvider
 ) : JwtTokenManager {
 
-    @Value("\${security.jwt.token.secret-key}")
-    private lateinit var secretKey: String
-
     init {
-        secretKey = base64Encoder.encodeToString(secretKey.toByteArray())
+        SECRET_KEY = base64Encoder.encodeToString(SECRET_KEY.toByteArray())
     }
 
     override fun createToken(username: String): String {
@@ -32,7 +29,7 @@ class SpringJwtTokenManager(
             setSubject(username) // TODO: 14-Nov-20 change with key-value store later
             setIssuedAt(now)
             setExpiration(expiration)
-            signWith(SIGNATURE_ALGORITHM, secretKey)
+            signWith(SIGNATURE_ALGORITHM, SECRET_KEY)
         }.compact()
     }
 
@@ -47,10 +44,11 @@ class SpringJwtTokenManager(
     }
 
     private fun getClaims(token: String): Jws<Claims> {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)
+        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token)
     }
 
     companion object {
+        private var SECRET_KEY = "secret-key"
         const val TOKEN_VALIDITY: Long = 3600000
         val SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256
     }
