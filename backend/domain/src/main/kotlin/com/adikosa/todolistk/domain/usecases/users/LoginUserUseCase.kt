@@ -19,7 +19,7 @@ class LoginUserUseCaseImpl(
         authManager.authenticate(loginData)
 
         val uuid = userService.findIdByUsername(loginData.username)
-        val token = jwtTokenManager.createToken(uuid)
+        val token = jwtTokenManager.createToken(loginData.username)
         return TokenResult(uuid, token)
     }
 

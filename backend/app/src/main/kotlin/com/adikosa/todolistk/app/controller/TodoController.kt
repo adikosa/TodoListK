@@ -7,6 +7,7 @@ import com.adikosa.todolistk.domain.usecases.todos.DeleteTodoUseCase
 import com.adikosa.todolistk.domain.usecases.todos.UpdateTodoUseCase
 import com.adikosa.todolistk.domain.usecases.todos.GetUserTodosUseCase
 import com.adikosa.todolistk.domain.usecases.todos.SaveTodoUseCase
+import java.util.*
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -38,12 +39,12 @@ class TodoController(
     }
 
     @PatchMapping
-    fun updateCurrentUserTodo(@RequestBody todoData: TodoData, @RequestParam todoId: String): TodoData {
+    fun updateCurrentUserTodo(@RequestBody todoData: TodoData, @RequestParam todoId: UUID): TodoData {
         return updateTodoUseCase.invoke(currentUser.id, todoData, todoId)
     }
 
     @DeleteMapping
-    fun deleteById(@RequestParam todoId: String) {
+    fun deleteById(@RequestParam todoId: UUID) {
         deleteTodoUseCase.invoke(todoId)
     }
 

@@ -53,7 +53,6 @@ class HttpSecurityConfiguration(
         authManager = provideAuthManager()
     }
 
-
     @Bean
     @Throws(Exception::class)
     override fun authenticationManagerBean(): AuthenticationManager {
@@ -67,12 +66,15 @@ class HttpSecurityConfiguration(
     override fun configure(http: HttpSecurity) {
         http
                 .csrf().disable()
+                    .headers().frameOptions().disable()
+                .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .authorizeRequests()
-                    .antMatchers("/api/login", "/api/register").permitAll()
-                    .anyRequest().authenticated()
+                    .anyRequest().permitAll()
                 .and()
                     .addFilterBefore(JwtTokenFilter(tokenManager, authManager), UsernamePasswordAuthenticationFilter::class.java)
     }
+
+
 }
