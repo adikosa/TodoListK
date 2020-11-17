@@ -13,3 +13,8 @@ security:
   jwt:
     token:
       secret-key: secret
+
+springfox:
+  documentation:
+    swagger-ui:
+      base-url: /api

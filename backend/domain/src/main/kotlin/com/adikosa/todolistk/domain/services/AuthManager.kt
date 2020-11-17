@@ -4,5 +4,5 @@ import com.adikosa.todolistk.domain.model.LoginData
 
 interface AuthManager {
     fun authenticate(loginData: LoginData)
-    fun authenticate(email: String)
+    fun authenticate(username: String)
 }

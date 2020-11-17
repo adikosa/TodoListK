@@ -28,4 +28,7 @@ dependencies {
 
     implementation("io.jsonwebtoken:jjwt:0.9.1")
     implementation("io.github.microutils:kotlin-logging:1.12.0")
+
+    implementation("io.springfox:springfox-boot-starter:3.0.0")
+    implementation("io.springfox:springfox-swagger-ui:3.0.0")
 }
