@@ -1,6 +1,7 @@
 package com.adikosa.todolistk.storage
 
 import com.adikosa.todolistk.storage.entities.PriorityEntity
+import com.adikosa.todolistk.storage.entities.RoleEntity
 import com.adikosa.todolistk.storage.entities.TodoEntity
 import com.adikosa.todolistk.storage.entities.UserEntity
 import java.util.*
@@ -12,6 +13,10 @@ interface UserRepository : JpaRepository<UserEntity, UUID> {
     fun findByEmail(email: String): UserEntity?
     fun existsByUsername(username: String): Boolean
     fun findByUsername(username: String): UserEntity?
+}
+
+interface RoleRepository : JpaRepository<RoleEntity, UUID> {
+    fun findByName(s: String): RoleEntity?
 }
 
 interface TodoRepository : JpaRepository<TodoEntity, UUID> {

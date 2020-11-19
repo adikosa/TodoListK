@@ -8,5 +8,5 @@ interface UserService {
     fun findIdByEmail(email: String): UUID
     fun isUsernameTaken(username: String): Boolean
     fun isEmailTaken(email: String): Boolean
-    fun save(registerData: RegisterData): UUID
+    fun register(registerData: RegisterData): UUID
 }

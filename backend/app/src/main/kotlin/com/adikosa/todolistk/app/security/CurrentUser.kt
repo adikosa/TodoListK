@@ -1,9 +1,8 @@
 package com.adikosa.todolistk.app.security
 
 import com.adikosa.todolistk.domain.services.UserService
-import java.lang.RuntimeException
 import java.util.*
-import org.springframework.security.core.context.SecurityContext
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 
@@ -13,7 +12,6 @@ interface CurrentUser {
 
 @Component
 class CurrentUserImpl(
-        private val securityContext: SecurityContext,
         private val userService: UserService
 ) : CurrentUser {
 
@@ -25,7 +23,7 @@ class CurrentUserImpl(
 
 
     private fun getUsername(): String? {
-        val principal = securityContext.authentication.principal
+        val principal = SecurityContextHolder.getContext().authentication.principal
         if (principal is UserDetails) {
             return principal.username
         }

@@ -18,3 +18,7 @@ springfox:
   documentation:
     swagger-ui:
       base-url: /api
+
+logging:
+  level:
+    root: debug

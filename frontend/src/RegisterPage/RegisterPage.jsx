@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-
+import { history } from "../components/history"
 import { userActions } from '../_actions';
+import {userRepository} from "../repository/user.repository";
 
 class RegisterPage extends React.Component {
     constructor(props) {
@@ -13,9 +14,11 @@ class RegisterPage extends React.Component {
                 firstName: '',
                 lastName: '',
                 username: '',
+                email: '',
                 password: ''
             },
-            submitted: false
+            submitted: false,
+            tokenResult: null
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -38,8 +41,14 @@ class RegisterPage extends React.Component {
 
         this.setState({ submitted: true });
         const { user } = this.state;
-        if (user.firstName && user.lastName && user.username && user.password) {
-            this.props.register(user);
+        if (user.firstName && user.lastName && user.username && user.email && user.password) { // TODO validate easier
+            userRepository.register(user)
+                .then(tokenResult => {
+                    this.setState({ tokenResult: tokenResult })
+                    localStorage.setItem("userId", this.state.tokenResult.id)
+                    localStorage.setItem("token", this.state.tokenResult.token)
+                    history.push('/')
+                })
         }
     }
 
@@ -69,6 +78,13 @@ class RegisterPage extends React.Component {
                         <input type="text" className="form-control" name="username" value={user.username} onChange={this.handleChange} />
                         {submitted && !user.username &&
                             <div className="help-block">Username is required</div>
+                        }
+                    </div>
+                    <div className={'form-group' + (submitted && !user.email ? ' has-error' : '')}>
+                        <label htmlFor="email">Email</label>
+                        <input type="text" className="form-control" name="email" value={user.email} onChange={this.handleChange} />
+                        {submitted && !user.email &&
+                        <div className="help-block">Email is required</div>
                         }
                     </div>
                     <div className={'form-group' + (submitted && !user.password ? ' has-error' : '')}>
