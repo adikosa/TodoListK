@@ -1,4 +1,4 @@
-import {post} from "./base.request";
+import {delete_with_auth, get_with_auth, post_with_auth} from "./base.request";
 
 export const todoService = {
     save,
@@ -7,13 +7,13 @@ export const todoService = {
 };
 
 function save(todo) {
-    return post('/todos', todo)
+    return post_with_auth('/todos', todo)
 }
 
-function getUserTodos(userId) {
-    return post('/todos/' + userId, null)
+function getUserTodos() {
+    return get_with_auth('/todos', null)
 }
 
 function deleteById(todoId) {
-    return post('/todos/' + todoId, null)
+    return delete_with_auth('/todos/' + todoId, null)
 }

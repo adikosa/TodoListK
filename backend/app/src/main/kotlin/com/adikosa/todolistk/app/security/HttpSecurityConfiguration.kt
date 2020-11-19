@@ -4,7 +4,6 @@ import com.adikosa.todolistk.app.di.SpringAuthManager
 import com.adikosa.todolistk.domain.services.AuthManager
 import com.adikosa.todolistk.domain.services.JwtTokenManager
 import javax.annotation.PostConstruct
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
@@ -20,6 +19,8 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.web.servlet.config.annotation.CorsRegistry
+
 
 @Configuration
 @EnableGlobalMethodSecurity(
@@ -66,6 +67,8 @@ class HttpSecurityConfiguration(
     override fun configure(http: HttpSecurity) {
         http
                 .csrf().disable()
+                .cors()
+                .and()
                     .headers().frameOptions().disable()
                 .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -75,6 +78,5 @@ class HttpSecurityConfiguration(
                 .and()
                     .addFilterBefore(JwtTokenFilter(tokenManager, authManager), UsernamePasswordAuthenticationFilter::class.java)
     }
-
 
 }

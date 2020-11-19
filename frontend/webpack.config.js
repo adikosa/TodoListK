@@ -17,7 +17,8 @@ module.exports = {
         template: './src/index.html'
     })],
     devServer: {
-        historyApiFallback: true
+        historyApiFallback: true,
+        port: 3000
     },
     externals: {
         config: JSON.stringify({

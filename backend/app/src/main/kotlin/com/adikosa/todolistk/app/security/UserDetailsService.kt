@@ -20,7 +20,9 @@ class UserDetailsServiceImpl(
     }
 }
 
-class UserDetailsImpl(private val userEntity: UserEntity) : UserDetails {
+class UserDetailsImpl(
+        private val userEntity: UserEntity
+) : UserDetails {
 
     override fun getAuthorities(): Collection<GrantedAuthority> {
         return userEntity.roles.map { SimpleGrantedAuthority( it.name) }
@@ -31,6 +33,6 @@ class UserDetailsImpl(private val userEntity: UserEntity) : UserDetails {
 
     override fun isCredentialsNonExpired() = !userEntity.isCredentialsExpired
     override fun isAccountNonExpired() = !userEntity.isExpired
-    override fun isAccountNonLocked() = userEntity.isLocked
+    override fun isAccountNonLocked() = !userEntity.isLocked
     override fun isEnabled() = userEntity.isEnabled
 }

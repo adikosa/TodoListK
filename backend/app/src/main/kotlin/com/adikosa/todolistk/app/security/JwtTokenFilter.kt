@@ -34,6 +34,7 @@ class JwtTokenFilter(
     private fun getBearerToken(httpServletRequest: HttpServletRequest): String? {
         val bearerToken: String = httpServletRequest.getHeader(AUTHORIZATION_HEADER) ?: return null
 
+        println("Authorization header is ok")
         if (!bearerToken.startsWith(BEARER_TOKEN_PREFIX)) {
             throw RuntimeException("Invalid Bearer token")
         }
