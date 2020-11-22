@@ -24,6 +24,13 @@ class UserServiceImpl(
         return savedUser.id!!
     }
 
+    override fun activate(userId: UUID) {
+        val user = userRepository.findById(userId).orElseThrow { RuntimeException() }.apply {
+            isEnabled = true
+        }
+        userRepository.save(user)
+    }
+
     override fun isEmailTaken(email: String): Boolean {
         return userRepository.existsByEmail(email)
     }
@@ -42,5 +49,3 @@ class UserServiceImpl(
         return userRepository.existsByUsername(username)
     }
 }
-
-

@@ -6,6 +6,10 @@ plugins {
     kotlin("plugin.jpa")
 }
 
+repositories {
+    maven("https://repo.spring.io/libs-milestone")
+}
+
 dependencies {
     implementation(project(":domain"))
     implementation(project(":storage"))
@@ -31,4 +35,8 @@ dependencies {
 
     implementation("io.springfox:springfox-boot-starter:3.0.0")
     implementation("io.springfox:springfox-swagger-ui:3.0.0")
+
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.springframework.boot:spring-boot-starter-mail")
+    implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:2.0.0")
 }

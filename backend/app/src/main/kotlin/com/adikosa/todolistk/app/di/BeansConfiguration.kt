@@ -1,6 +1,7 @@
 package com.adikosa.todolistk.app.di
 
 import com.adikosa.todolistk.domain.services.AuthManager
+import com.adikosa.todolistk.domain.services.EmailService
 import com.adikosa.todolistk.domain.services.JwtTokenManager
 import com.adikosa.todolistk.domain.services.PasswordManager
 import com.adikosa.todolistk.domain.services.TodoService
@@ -13,12 +14,8 @@ import com.adikosa.todolistk.domain.usecases.todos.GetUserTodosUseCase
 import com.adikosa.todolistk.domain.usecases.todos.GetUserTodosUseCaseImpl
 import com.adikosa.todolistk.domain.usecases.todos.SaveTodoUseCase
 import com.adikosa.todolistk.domain.usecases.todos.SaveTodoUseCaseImpl
-//import com.adikosa.todolistk.domain.usecases.users.DeleteUserUseCase
-//import com.adikosa.todolistk.domain.usecases.users.DeleteUserUseCaseImpl
-//import com.adikosa.todolistk.domain.usecases.users.GetUserUseCase
-//import com.adikosa.todolistk.domain.usecases.users.GetUserUseCaseImpl
-//import com.adikosa.todolistk.domain.usecases.users.GetUsersUseCase
-//import com.adikosa.todolistk.domain.usecases.users.GetUsersUseCaseImpl
+import com.adikosa.todolistk.domain.usecases.users.ActivateUserAccountUseCase
+import com.adikosa.todolistk.domain.usecases.users.ActivateUserAccountUseCaseImpl
 import com.adikosa.todolistk.domain.usecases.users.LoginUserUseCase
 import com.adikosa.todolistk.domain.usecases.users.LoginUserUseCaseImpl
 import com.adikosa.todolistk.domain.usecases.users.RegisterUserUseCase
@@ -71,29 +68,23 @@ class BeansConfiguration {
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     fun deleteTodoUseCaseFactory(todoService: TodoService): DeleteTodoUseCase = DeleteTodoUseCaseImpl(todoService)
 
-//    @Bean
-//    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-//    fun getUserUseCaseFactory(userService: UserService): GetUserUseCase = GetUserUseCaseImpl(userService)
-//
-//    @Bean
-//    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-//    fun getUsersUseCaseFactory(userService: UserService): GetUsersUseCase = GetUsersUseCaseImpl(userService)
-
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     fun registerUserUseCaseFactory(passwordManager: PasswordManager, jwtTokenManager: JwtTokenManager,
-                                        userService: UserService): RegisterUserUseCase {
-        return RegisterUserUseCaseImpl(passwordManager, jwtTokenManager, userService)
+                                        userService: UserService, emailService: EmailService): RegisterUserUseCase {
+        return RegisterUserUseCaseImpl(passwordManager, jwtTokenManager, userService, emailService)
     }
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    fun loginUserUseCase(jwtTokenManager: JwtTokenManager, userService: UserService,
+    fun loginUserUseCaseFactory(jwtTokenManager: JwtTokenManager, userService: UserService,
                               authManager: AuthManager): LoginUserUseCase {
         return LoginUserUseCaseImpl(jwtTokenManager, userService, authManager)
     }
 
-//    @Bean
-//    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-//    fun deleteUserUseCaseFactory(userService: UserService): DeleteUserUseCase = DeleteUserUseCaseImpl(userService)
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    fun activateUserAccountUseCaseFactory(userService: UserService): ActivateUserAccountUseCase {
+        return ActivateUserAccountUseCaseImpl(userService)
+    }
 }

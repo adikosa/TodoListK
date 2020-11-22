@@ -46,7 +46,7 @@ class HttpSecurityConfiguration(
 
     @Bean
     fun provideAuthManager(): AuthManager {
-        return SpringAuthManager(authenticationManagerBean(), userDetailsService, provideSecurityContext())
+        return SpringAuthManager(authenticationManagerBean(), userDetailsService)
     }
 
     @PostConstruct
