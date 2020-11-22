@@ -9,6 +9,10 @@ spring:
     password:
     driverClassName: org.h2.Driver
 
+google:
+  client-id: ENC(GAmBuplLJtbDCjC+Oh7Uc/G47mIIyQ3wBttYN6O4NKMcZDueOD2/KkFY9uJmodX0zy2d8bZGizXrhHsGPaNFxleowKey9OEd6b8Mxk2shW2p7J7CvwGYig==)
+  client-secret: ENC(N/7LNG2jkRJND9yIdGyux28F3AjOeQBfAhoGkdGK1yb2KK5lPBzZ4g==)
+  redirect-uri: http://localhost:8080/api/todos/syncWithGoogleTasks
 security:
   jwt:
     token:
