@@ -9,4 +9,5 @@ interface UserService {
     fun isUsernameTaken(username: String): Boolean
     fun isEmailTaken(email: String): Boolean
     fun register(registerData: RegisterData): UUID
+    fun activate(userId: UUID)
 }

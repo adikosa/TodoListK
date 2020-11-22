@@ -22,3 +22,10 @@ springfox:
 logging:
   level:
     root: debug
+
+mail:
+  templates.path: thymeleaf-templates
+  host: SMTP.office365.com
+  username: ENC(w+rbJUK0PHMuq5bRexiHD/r2P36/pr/FxhaZKII9vjQ=)
+  password: ENC(8mN5EswTrJxk3Jva3fbv7QChxM9j0g+9)
+  port: 587
