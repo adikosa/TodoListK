@@ -5,9 +5,9 @@ import SignedInLinks from './SignedInLinks';
 import SignedOutLinks from './SignedOutLinks';
 
 function Navbar(props){
-    const { userId } = props;
+    const { userCredentials } = props;
 
-    const links = userId ? <SignedInLinks/> : <SignedOutLinks/>;
+    const links = userCredentials ? <SignedInLinks/> : <SignedOutLinks/>;
 
     return(
         <nav className="nav-wrapper red darken-3">
@@ -21,7 +21,7 @@ function Navbar(props){
 
 const mapStateToProps = (state) => {
     return{
-      userId: state.auth.userId
+        userCredentials: state.auth.userCredentials,
     }
 }
   
