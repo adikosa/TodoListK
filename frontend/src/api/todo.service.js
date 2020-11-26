@@ -11,7 +11,7 @@ function save(todo) {
 }
 
 function getUserTodos() {
-    return get_with_auth('/todos', null)
+    return get_with_auth('/todos')
 }
 
 function deleteById(todoId) {
