@@ -8,6 +8,7 @@ data class TodoData(
         var title: String,
         var description: String,
         var dueDateTime: LocalDateTime,
+        var isDone: Boolean,
         var userId: UUID,
         var priority: String?,
         var createdAt: LocalDateTime?

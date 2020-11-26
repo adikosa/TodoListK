@@ -1,5 +1,5 @@
 package com.adikosa.todolistk.app.model
 
-data class ApiMessage(
+data class ApiResponse(
         val message: String
 )

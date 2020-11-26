@@ -83,4 +83,17 @@ class BeansConfiguration {
     fun activateUserAccountUseCaseFactory(userService: UserService): ActivateUserAccountUseCase {
         return ActivateUserAccountUseCaseImpl(userService)
     }
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    fun getGoogleTasksOAuthUrlUseCaseFactory(googleTasksService: GoogleTasksService): GetGoogleTasksOAuthUrlUseCase {
+        return GetGoogleTasksOAuthUrlUseCaseImpl(googleTasksService)
+    }
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    fun syncUserTodosWithGoogleTasksUseCaseFactory(): SyncUserTodosWithGoogleTasksUseCase {
+        return SyncUserTodosWithGoogleTasksUseCaseImpl()
+    }
+
 }

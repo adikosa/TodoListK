@@ -8,10 +8,8 @@ import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jws
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
-import java.lang.RuntimeException
-import java.util.*
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+import java.util.*
 
 @Component
 class SpringJwtTokenManager(
@@ -54,7 +52,7 @@ class SpringJwtTokenManager(
 
     companion object {
         private var SECRET_KEY = "secret-key"
-        const val TOKEN_VALIDITY: Long = 3600000
+        const val TOKEN_VALIDITY: Long = 86400000
         val SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256
     }
 }

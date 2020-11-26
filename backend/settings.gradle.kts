@@ -1,2 +1,2 @@
 rootProject.name = "todolistk"
-include("app", "storage", "domain")
+include("app", "storage", "network", "domain")
