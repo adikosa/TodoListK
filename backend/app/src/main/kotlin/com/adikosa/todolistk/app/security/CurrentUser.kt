@@ -1,14 +1,11 @@
 package com.adikosa.todolistk.app.security
 
+import com.adikosa.todolistk.domain.services.CurrentUser
 import com.adikosa.todolistk.domain.services.UserService
 import java.util.*
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
-
-interface CurrentUser {
-    val id: UUID
-}
 
 @Component
 class CurrentUserImpl(

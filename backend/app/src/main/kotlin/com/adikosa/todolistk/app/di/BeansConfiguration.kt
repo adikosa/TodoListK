@@ -1,25 +1,15 @@
 package com.adikosa.todolistk.app.di
 
-import com.adikosa.todolistk.domain.services.AuthManager
-import com.adikosa.todolistk.domain.services.EmailService
-import com.adikosa.todolistk.domain.services.JwtTokenManager
-import com.adikosa.todolistk.domain.services.PasswordManager
-import com.adikosa.todolistk.domain.services.TodoService
-import com.adikosa.todolistk.domain.services.UserService
+import com.adikosa.todolistk.domain.services.*
 import com.adikosa.todolistk.domain.usecases.todos.DeleteTodoUseCase
 import com.adikosa.todolistk.domain.usecases.todos.DeleteTodoUseCaseImpl
 import com.adikosa.todolistk.domain.usecases.todos.UpdateTodoUseCase
 import com.adikosa.todolistk.domain.usecases.todos.UpdateTodoUseCaseImpl
 import com.adikosa.todolistk.domain.usecases.todos.GetUserTodosUseCase
 import com.adikosa.todolistk.domain.usecases.todos.GetUserTodosUseCaseImpl
-import com.adikosa.todolistk.domain.usecases.todos.SaveTodoUseCase
-import com.adikosa.todolistk.domain.usecases.todos.SaveTodoUseCaseImpl
-import com.adikosa.todolistk.domain.usecases.users.ActivateUserAccountUseCase
-import com.adikosa.todolistk.domain.usecases.users.ActivateUserAccountUseCaseImpl
-import com.adikosa.todolistk.domain.usecases.users.LoginUserUseCase
-import com.adikosa.todolistk.domain.usecases.users.LoginUserUseCaseImpl
-import com.adikosa.todolistk.domain.usecases.users.RegisterUserUseCase
-import com.adikosa.todolistk.domain.usecases.users.RegisterUserUseCaseImpl
+import com.adikosa.todolistk.domain.usecases.todos.CreateTodoUseCase
+import com.adikosa.todolistk.domain.usecases.todos.CreateTodoUseCaseImpl
+import com.adikosa.todolistk.domain.usecases.users.*
 import java.util.*
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.boot.autoconfigure.domain.EntityScan
@@ -54,7 +44,7 @@ class BeansConfiguration {
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    fun saveTodoUseCaseFactory(todoService: TodoService): SaveTodoUseCase = SaveTodoUseCaseImpl(todoService)
+    fun saveTodoUseCaseFactory(todoService: TodoService): CreateTodoUseCase = CreateTodoUseCaseImpl(todoService)
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -80,6 +70,12 @@ class BeansConfiguration {
     fun loginUserUseCaseFactory(jwtTokenManager: JwtTokenManager, userService: UserService,
                               authManager: AuthManager): LoginUserUseCase {
         return LoginUserUseCaseImpl(jwtTokenManager, userService, authManager)
+    }
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    fun logoutUseCaseFactory(currentUser: CurrentUser, userService: UserService): LogoutUseCase {
+        return LogoutUseCaseImpl(currentUser, userService)
     }
 
     @Bean

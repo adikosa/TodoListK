@@ -3,7 +3,6 @@ package com.adikosa.todolistk.domain.usecases.users
 import com.adikosa.todolistk.domain.services.UserService
 import java.util.*
 
-
 interface ActivateUserAccountUseCase {
     fun invoke(userId: UUID)
 }
