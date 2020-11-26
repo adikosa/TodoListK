@@ -7,7 +7,7 @@ export const todoRepository = {
 };
 
 function save(todo) {
-    return todoService.save()
+    return todoService.save(todo)
 }
 
 function getUserTodos() {
@@ -15,5 +15,5 @@ function getUserTodos() {
 }
 
 function deleteById(todoId) {
-    return todoService.deleteById()
+    return todoService.deleteById(todoId)
 }

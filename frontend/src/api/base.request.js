@@ -1,22 +1,24 @@
 import axios from 'axios'
 
-const AUTH_HEADER = {
-    'Authorization': getBearerToken()
-}
-
 const instance = axios.create({
     baseURL: 'http://localhost:8080/api/',
     headers: {'Content-Type': 'application/json'}
 });
 
 function getBearerToken() {
-    let user = JSON.parse(localStorage.getItem('user'));
+    //todo implement getting credentials from redux?
+    const jsonCredentials = localStorage.getItem('userCredentials');
+    const credentials = jsonCredentials ? JSON.parse(jsonCredentials) : null;
 
-    if (user && user.token) {
-        return 'Bearer ' + user.token
+    if (credentials) {
+        return 'Bearer ' + credentials.token
     } else {
         return '';
     }
+}
+
+function getAuthHeader(){
+    return {'Authorization': getBearerToken(), 'Content-Type': 'application/json'}
 }
 
 export function get(route, body) {
@@ -24,7 +26,10 @@ export function get(route, body) {
 }
 
 export function get_with_auth(route, body) {
-    return instance.get(route, {headers: {AUTH_HEADER}}, body)
+    if(body === undefined) {
+        return instance.get(route, {headers: getAuthHeader()})
+    }
+    return instance.get(route, body, {headers: getAuthHeader()})
 }
 
 export function post(route, body) {
@@ -32,11 +37,17 @@ export function post(route, body) {
 }
 
 export function post_with_auth(route, body) {
-    return instance.post(route, {headers: {AUTH_HEADER}}, body)
+    if(body === undefined) {
+        return instance.post(route, {headers: getAuthHeader()})
+    }
+    return instance.post(route, body, {headers: getAuthHeader()})
 }
 
 export function delete_with_auth(route, body) {
-    return instance.delete(route, {headers: {AUTH_HEADER}}, body)
+    if(body === undefined) {
+        return instance.delete(route, {headers: getAuthHeader()})
+    }
+    return instance.delete(route, body, {headers: getAuthHeader()})
 }
 
 // function handleResponse(response) {
