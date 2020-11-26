@@ -1,6 +1,6 @@
 package com.adikosa.todolistk.app.controller
 
-import com.adikosa.todolistk.app.model.ApiMessage
+import com.adikosa.todolistk.app.model.ApiResponse
 import com.adikosa.todolistk.app.security.IsAuthenticated
 import com.adikosa.todolistk.domain.model.LoginData
 import com.adikosa.todolistk.domain.model.RegisterData
@@ -41,15 +41,15 @@ class UserController(
 
     @IsAuthenticated
     @PostMapping("/logout")
-    fun login(): ResponseEntity<ApiMessage> {
+    fun login(): ResponseEntity<ApiResponse> {
         logoutUseCase.invoke()
-        return ok(ApiMessage("User logged out"))
+        return ok(ApiResponse("User logged out"))
     }
 
     @GetMapping("/activate")
-    fun activateUser(@RequestParam(name = "token") userActivationToken: String): ResponseEntity<ApiMessage> {
+    fun activateUser(@RequestParam(name = "token") userActivationToken: String): ResponseEntity<ApiResponse> {
         activateUserAccountUseCase.invoke(UUID.fromString(userActivationToken))
-        return ok(ApiMessage("User account activated"))
+        return ok(ApiResponse("User account activated"))
     }
 
 }

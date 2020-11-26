@@ -55,7 +55,7 @@ class TodoServiceImpl(
     private fun CreateTodoData.toEntity(): TodoEntity {
         val user = userRepository.findById(currentUser.id).orElseThrow { RuntimeException("User ${currentUser.id} not found") }
         val priority = priorityRepository.findByName(priority)?: throw RuntimeException("Priority $priority!! not found")
-        return TodoEntity(title, description, dueDateTime, user, priority)
+        return TodoEntity(title, description, dueDateTime, isDone, user, priority)
     }
 }
 
@@ -64,5 +64,5 @@ fun List<TodoEntity>.toDomain(): List<TodoData> {
 }
 
 fun TodoEntity.toDomain(): TodoData {
-    return TodoData(id, title, description, dueDateTime, user.id!!, priority?.name, createdAt)
+    return TodoData(id, title, description, dueDateTime, isDone, user.id!!, priority?.name, createdAt)
 }
