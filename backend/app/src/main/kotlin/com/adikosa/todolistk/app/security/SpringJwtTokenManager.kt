@@ -3,6 +3,7 @@ package com.adikosa.todolistk.app.security
 import com.adikosa.todolistk.app.utils.plusMillis
 import com.adikosa.todolistk.domain.DateProvider
 import com.adikosa.todolistk.domain.services.JwtTokenManager
+import com.adikosa.todolistk.domain.services.UserService
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jws
 import io.jsonwebtoken.Jwts
@@ -15,7 +16,8 @@ import org.springframework.stereotype.Component
 @Component
 class SpringJwtTokenManager(
         base64Encoder: Base64.Encoder,
-        private val dateProvider: DateProvider
+        private val dateProvider: DateProvider,
+        private val userService: UserService
 ) : JwtTokenManager {
 
     init {
@@ -36,7 +38,7 @@ class SpringJwtTokenManager(
 
     override fun validate(token: String) {
         val claims = getClaims(token)
-        if (claims.body.expiration.before(dateProvider.now())) {
+        if (claims.body.expiration.before(dateProvider.now()) || !userService.hasUserToken(getUsername(token), token)) {
             throw RuntimeException("Invalid Jwt Token")
         }
     }

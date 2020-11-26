@@ -27,5 +27,6 @@ class UserEntity(
         var isExpired: Boolean = false,
         var isLocked: Boolean = false,
         var isCredentialsExpired: Boolean = false,
-        var isEnabled: Boolean = true
+        var isEnabled: Boolean = true,
+        var token: String? = null
 ) : AbstractEntity()

@@ -16,7 +16,7 @@ class UserServiceImpl(
 ) : UserService {
     override fun register(registerData: RegisterData): UUID {
         val savedUser = with(registerData) {
-            val user = UserEntity(firstName, lastName, username, email, password)
+            val user = UserEntity(firstName, lastName, username, email, password, isEnabled = false)
             val userRole = roleRepository.findByName("ROLE_USER")?: throw RuntimeException()
             user.roles = user.roles.plus(userRole)
             userRepository.save(user)
@@ -25,10 +25,26 @@ class UserServiceImpl(
     }
 
     override fun activate(userId: UUID) {
-        val user = userRepository.findById(userId).orElseThrow { RuntimeException() }.apply {
-            isEnabled = true
-        }
+        val user = findById(userId).apply { isEnabled = true }
         userRepository.save(user)
+    }
+
+    override fun saveUserToken(userId: UUID, token: String) {
+        val user = findById(userId).apply { this.token = token }
+        userRepository.save(user)
+    }
+
+    override fun removeUserToken(userId: UUID) {
+        val user = findById(userId).apply { this.token = null }
+        userRepository.save(user)
+    }
+
+    private fun findById(userId: UUID): UserEntity {
+        return userRepository.findById(userId).orElseThrow { RuntimeException() }
+    }
+
+    override fun hasUserToken(username: String, token: String): Boolean {
+        return userRepository.existsByUsernameAndToken(username, token)
     }
 
     override fun isEmailTaken(email: String): Boolean {
