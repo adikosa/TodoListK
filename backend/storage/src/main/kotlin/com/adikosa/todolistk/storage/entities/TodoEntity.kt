@@ -13,7 +13,8 @@ data class TodoEntity(
         var title: String,
         var description: String,
         var dueDateTime: LocalDateTime,
-        var isDone: Boolean = false,
         @ManyToOne var user: UserEntity,
-        @ManyToOne var priority: PriorityEntity?
+        @ManyToOne var priority: PriorityEntity,
+        var isDone: Boolean = false,
+        var completed: LocalDateTime? = null
 ) : AbstractEntity()

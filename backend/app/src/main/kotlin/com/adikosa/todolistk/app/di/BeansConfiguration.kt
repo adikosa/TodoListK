@@ -20,10 +20,9 @@ import org.springframework.context.annotation.Scope
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
-
 @Configuration
 @EntityScan(basePackages = ["com.adikosa.todolistk.storage"])
-@ComponentScan(basePackages = ["com.adikosa.todolistk.storage"])
+@ComponentScan(basePackages = ["com.adikosa.todolistk.storage", "com.adikosa.todolistk.network"])
 @EnableJpaRepositories(basePackages = ["com.adikosa.todolistk.storage"])
 class BeansConfiguration {
 
@@ -48,7 +47,9 @@ class BeansConfiguration {
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    fun editTodoUseCaseFactory(todoService: TodoService): UpdateTodoUseCase = UpdateTodoUseCaseImpl(todoService)
+    fun editTodoUseCaseFactory(currentUser: CurrentUser, todoService: TodoService): UpdateTodoUseCase {
+        return UpdateTodoUseCaseImpl(currentUser, todoService)
+    }
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -92,8 +93,11 @@ class BeansConfiguration {
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    fun syncUserTodosWithGoogleTasksUseCaseFactory(): SyncUserTodosWithGoogleTasksUseCase {
-        return SyncUserTodosWithGoogleTasksUseCaseImpl()
+    fun syncUserTodosWithGoogleTasksUseCaseFactory(currentUser: CurrentUser, todoService: TodoService,
+                                                   googleTasksService: GoogleTasksService
+    ): SyncUserTodosWithGoogleTasksUseCase {
+        return SyncUserTodosWithGoogleTasksUseCaseImpl(currentUser, todoService, googleTasksService)
     }
 
 }
+

@@ -10,6 +10,7 @@ data class TodoData(
         var dueDateTime: LocalDateTime,
         var isDone: Boolean,
         var userId: UUID,
-        var priority: String?,
+        var priority: String,
+        val completed: LocalDateTime?,
         var createdAt: LocalDateTime?
 )
