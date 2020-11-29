@@ -6,27 +6,24 @@ import com.adikosa.todolistk.domain.usecases.users.GetGoogleTasksOAuthUrlUseCase
 import com.adikosa.todolistk.domain.usecases.users.SyncUserTodosWithGoogleTasksUseCase
 import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.ok
-import org.springframework.web.bind.annotation.CrossOrigin
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @CrossOrigin
 @IsAuthenticated
 @RestController
-@RequestMapping("/api/todos")
+@RequestMapping("/api/googleTasks")
 class GoogleTasksController(
         private val getGoogleTasksOAuthUrlUseCase: GetGoogleTasksOAuthUrlUseCase,
         private val syncUserTodosWithGoogleTasksUseCase: SyncUserTodosWithGoogleTasksUseCase
 ) {
 
-    @GetMapping("/getGoogleTasksOAuthUrl")
+    @GetMapping("/oAuthUrl")
     fun getGoogleTasksOAuthUrl(): ResponseEntity<UrlResponse> {
         return ok(UrlResponse(getGoogleTasksOAuthUrlUseCase.invoke()))
     }
 
-    @GetMapping("/syncWithGoogleTasks")
-    fun syncUserTodosWithGoogleTasks() {
-        syncUserTodosWithGoogleTasksUseCase.invoke()
+    @PostMapping("/sync")
+    fun syncUserTodosWithGoogleTasks(@RequestParam googleTasksToken: String) {
+        syncUserTodosWithGoogleTasksUseCase.invoke(googleTasksToken)
     }
 }

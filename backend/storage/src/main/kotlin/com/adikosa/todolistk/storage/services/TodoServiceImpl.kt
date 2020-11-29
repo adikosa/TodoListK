@@ -2,6 +2,7 @@ package com.adikosa.todolistk.storage.services
 
 import com.adikosa.todolistk.domain.model.CreateTodoData
 import com.adikosa.todolistk.domain.model.TodoData
+import com.adikosa.todolistk.domain.model.UpdateTodoData
 import com.adikosa.todolistk.domain.services.CurrentUser
 import com.adikosa.todolistk.domain.services.TodoService
 import com.adikosa.todolistk.storage.PriorityRepository
@@ -40,14 +41,18 @@ class TodoServiceImpl(
         todoRepository.deleteById(todoId)
     }
 
-    override fun update(todoData: TodoData, todoId: UUID): TodoData {
+    override fun update(updateTodoData: UpdateTodoData, todoId: UUID): TodoData {
         val todo = todoRepository.findById(todoId).orElseThrow { RuntimeException("Todo not found") }
-        val todoPriority = priorityRepository.findByName(todoData.priority!!)?: throw RuntimeException("Priority $todoData.priority!! not found")
-        todo.apply {
-            title = todoData.title
-            description = todoData.description
-            dueDateTime = todoData.dueDateTime
-            priority = todoPriority
+        with(updateTodoData) {
+            title?.let { todo.title = it }
+            description?.let { todo.description = it }
+            dueDateTime?.let { todo.dueDateTime = it }
+            isDone?.let { todo.isDone = it }
+            completed?.let { todo.completed = it }
+            priority?.let {
+                val priority = priorityRepository.findByName(it)?: throw RuntimeException("Priority $it not found")
+                todo.priority = priority
+            }
         }
         return todoRepository.save(todo).toDomain()
     }
@@ -55,7 +60,7 @@ class TodoServiceImpl(
     private fun CreateTodoData.toEntity(): TodoEntity {
         val user = userRepository.findById(currentUser.id).orElseThrow { RuntimeException("User ${currentUser.id} not found") }
         val priority = priorityRepository.findByName(priority)?: throw RuntimeException("Priority $priority!! not found")
-        return TodoEntity(title, description, dueDateTime, isDone, user, priority)
+        return TodoEntity(title, description, dueDateTime, user, priority, isDone)
     }
 }
 
@@ -64,5 +69,5 @@ fun List<TodoEntity>.toDomain(): List<TodoData> {
 }
 
 fun TodoEntity.toDomain(): TodoData {
-    return TodoData(id, title, description, dueDateTime, isDone, user.id!!, priority?.name, createdAt)
+    return TodoData(id, title, description, dueDateTime, isDone, user.id!!, priority.name, completed, createdAt)
 }

@@ -1,23 +1,26 @@
 package com.adikosa.todolistk.domain.usecases.todos
 
 import com.adikosa.todolistk.domain.model.TodoData
+import com.adikosa.todolistk.domain.model.UpdateTodoData
+import com.adikosa.todolistk.domain.services.CurrentUser
 import com.adikosa.todolistk.domain.services.TodoService
 import java.lang.RuntimeException
 import java.util.*
 
 interface UpdateTodoUseCase {
-    fun invoke(userId: UUID, todoData: TodoData, todoId: UUID): TodoData
+    fun invoke(updateTodoData: UpdateTodoData, todoId: UUID): TodoData
 }
 
 class UpdateTodoUseCaseImpl(
-    private val todoService: TodoService
+        private val currentUser: CurrentUser,
+        private val todoService: TodoService
 ) : UpdateTodoUseCase {
-    override fun invoke(userId: UUID, todoData: TodoData, todoId: UUID): TodoData {
-        if (!todoService.isUserTodoCreator(userId, todoId)) {
+    override fun invoke(updateTodoData: UpdateTodoData, todoId: UUID): TodoData {
+        if (!todoService.isUserTodoCreator(currentUser.id, todoId)) {
             throw RuntimeException("Unauthorized todo update")
         }
 
-        return todoService.update(todoData, todoId)
+        return todoService.update(updateTodoData, todoId)
     }
 
 }

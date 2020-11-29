@@ -3,6 +3,7 @@ package com.adikosa.todolistk.app.controller
 import com.adikosa.todolistk.app.security.IsAuthenticated
 import com.adikosa.todolistk.domain.model.CreateTodoData
 import com.adikosa.todolistk.domain.model.TodoData
+import com.adikosa.todolistk.domain.model.UpdateTodoData
 import com.adikosa.todolistk.domain.services.CurrentUser
 import com.adikosa.todolistk.domain.usecases.todos.DeleteTodoUseCase
 import com.adikosa.todolistk.domain.usecases.todos.GetUserTodosUseCase
@@ -32,9 +33,9 @@ class TodoController(
         return getUserTodosUseCase.invoke(currentUser.id)
     }
 
-    @PatchMapping
-    fun updateCurrentUserTodo(@RequestBody todoData: TodoData, @RequestParam todoId: UUID): TodoData {
-        return updateTodoUseCase.invoke(currentUser.id, todoData, todoId)
+    @PatchMapping("/{todoId}")
+    fun updateCurrentUserTodo(@RequestBody updateTodoData: UpdateTodoData, @PathVariable todoId: UUID): TodoData {
+        return updateTodoUseCase.invoke(updateTodoData, todoId)
     }
 
     @DeleteMapping
