@@ -1,7 +1,7 @@
 import React from "react";
 import M from "materialize-css";
 import "materialize-css/dist/css/materialize.min.css";
-import {Button, DatePicker, Modal, Row, Select, TextInput, TimePicker} from "react-materialize";
+import {Button, DatePicker, Modal, Row, Select, TextInput} from "react-materialize";
 import { connect } from "react-redux";
 import {addTodo} from '../store/actions/todoActions'
 
@@ -12,7 +12,8 @@ class TodoModal extends React.Component {
         title: this.props.description,
         description: this.props.description,
         dueDateTime: this.props.dueDateTime,
-        priority: this.props.priority
+        priority: this.props.priority,
+        dueTimeText: this.props.dueDateTime.toLocaleTimeString("pl-pl", {hour: "2-digit", minute: "2-digit"})
     }
 
     convertTodoStateToTodoRequest = () => {
@@ -36,7 +37,9 @@ class TodoModal extends React.Component {
 
     onOpenStart = () => {
         const { title, description, dueDateTime, priority} = this.props;
-        this.setState({ title, description, dueDateTime, priority }, () => console.log("props received", this.state));
+
+        const dueTimeText = this.props.dueDateTime.toLocaleTimeString("pl-pl", {hour: "2-digit", minute: "2-digit"})
+        this.setState({ title, description, dueDateTime, priority, dueTimeText });
     }
 
     handleClick = (e) => {
@@ -50,8 +53,22 @@ class TodoModal extends React.Component {
         });
     }
 
-    handleTime = (hour, minute) => {
-        this.timePickerCachedData = {hour, minute}
+    handleTime = (e) => {
+        this.handleChange(e)
+        const {id, value} = e.target;
+        const isTimeValid = /^([01]\d|2[0-3]):([0-5]\d)$/.test(value)
+
+        if(isTimeValid) {
+            const hours = value.substring(0,2)
+            const minutes = value.substring(3,5)
+
+            const dueDateTime = new Date(this.state.dueDateTime.getTime());
+            dueDateTime.setHours(hours);
+            dueDateTime.setMinutes(minutes);
+            this.setState({
+                dueDateTime
+            })
+        }
     }
 
     handleSubmit = (e) => {
@@ -65,15 +82,6 @@ class TodoModal extends React.Component {
         this.setState({
             dueDateTime: date
         })
-    }
-
-    handleTimePickerClose = (e) => {
-        const {dueDateTime} = this.state
-        dueDateTime.setHours(this.timePickerCachedData.hour)
-        dueDateTime.setMinutes(this.timePickerCachedData.minute)
-        this.setState({
-            dueDateTime
-        })    
     }
 
     render() {
@@ -97,7 +105,7 @@ class TodoModal extends React.Component {
                         </Row>
                         <Row>                           
                             <DatePicker id="dueDate" label="Due date" options={{autoClose: true, defaultDate: this.state.dueDateTime, setDefaultDate: true}} onChange={this.handleDateChange} />
-                            <TimePicker id="dueTime" label="Due time" options={{autoClose: true, twelveHour: false, onCloseEnd: this.handleTimePickerClose, defaultTime: this.state.dueDateTime.getHours() + ":" + this.state.dueDateTime.getMinutes}} onChange={this.handleTime} />
+                            <TextInput id="dueTimeText" label="Due time" value={this.state.dueTimeText} onChange={this.handleTime}/>  
                         </Row>
                         <Row>
                             <Select id="priority" label="Priority" value={this.state.priority} onChange={this.handleChange}>
