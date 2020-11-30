@@ -1,7 +1,18 @@
+import { Button, Container, TextField, Typography, withStyles } from '@material-ui/core'
 import React from 'react'
 import {connect} from 'react-redux'
 import {Redirect} from 'react-router-dom'
+import { compose } from 'redux'
 import {register} from '../store/actions/authActions'
+
+const useStyles = theme => ({
+    root: {
+      '& .MuiFormControl-root': {
+        width: '100%',
+        margin: theme.spacing(2)
+        }
+    }
+})
 
 class Register extends React.Component {
     state = {
@@ -31,54 +42,26 @@ class Register extends React.Component {
     }
 
     render() {
-        const {authError, userCredentials} = this.props;
+        const {authError, userCredentials, classes} = this.props;
 
         if (userCredentials) {
             return <Redirect to='/'/>
         }
 
         return (
-            <div className="container">
-                <form className="white" onSubmit={this.handleSubmit}>
-                    <h5 className="grey-text text-darken-3">Register</h5>
-                    <div className="row">
-                        <div className="input-field col s6">
-                            <input id='firstName' type="text" onChange={this.handleChange}/>
-                            <label htmlFor="firstName">First Name</label>
-                        </div>
-                        <div className="input-field col s6">
-                            <input id='lastName' type="text" onChange={this.handleChange}/>
-                            <label htmlFor="lastName">Last Name</label>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="input-field col s12">
-                            <input id="email" type="email" onChange={this.handleChange}/>
-                            <label htmlFor="email">Email</label>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="input-field col s12">
-                            <input id="username" type="text" onChange={this.handleChange}/>
-                            <label htmlFor="username">Username</label>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="input-field col s12">
-                            <input id="password" type="password" onChange={this.handleChange}/>
-                            <label htmlFor="password">Password</label>
-                        </div>
-                    </div>
-
-
-                    <div className="input-field">
-                        <button className="btn red lighten-1 z-depth-0">Register</button>
-                        <div className="center red-text">
-                            {authError ? <p>{authError}</p> : null}
-                        </div>
-                    </div>
-                </form>
-            </div>
+            <form onSubmit={this.handleSubmit} className={classes.root} >
+                <Container maxWidth="sm">
+                    <TextField id="firstName" label="First name" onChange={this.handleChange} variant="outlined"/>
+                    <TextField id="lastName" label="Last name" onChange={this.handleChange} variant="outlined"/>
+                    <TextField id="email" label="Email" onChange={this.handleChange} variant="outlined"/>
+                    <TextField id="username" label="Username" onChange={this.handleChange} variant="outlined"/>
+                    <TextField id="password" label="Password" onChange={this.handleChange} variant="outlined" type="password"/>
+                    <Button type="submit" variant="contained" color="primary" > Register</Button>
+                </Container>
+                <Typography align="center" color="error" variant="h6">
+                    {authError ? <p>{authError}</p> : null}
+                </Typography>
+            </form>           
         )
     }
 }
@@ -96,4 +79,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Register)
+export default compose(withStyles(useStyles), connect(mapStateToProps, mapDispatchToProps)) (Register)

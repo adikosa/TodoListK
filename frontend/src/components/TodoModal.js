@@ -1,10 +1,21 @@
 import React from "react";
-import M from "materialize-css";
-import "materialize-css/dist/css/materialize.min.css";
-import {Button, DatePicker, Modal, Row, Select, TextInput} from "react-materialize";
+import Select from '@material-ui/core/Select';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { connect } from "react-redux";
 import {addTodo} from '../store/actions/todoActions'
+import { Button, Dialog, DialogActions, DialogContent, FormControl, InputLabel, MenuItem, TextField, withStyles } from "@material-ui/core";
+import { KeyboardDatePicker, KeyboardTimePicker } from "@material-ui/pickers";
+import { compose } from "redux";
 
+const useStyles = theme => ({
+    root: {
+      '& .MuiFormControl-root': {
+        width: '90%',
+        margin: theme.spacing(2)
+        }
+    }
+})
 
 class TodoModal extends React.Component {
     
@@ -13,7 +24,6 @@ class TodoModal extends React.Component {
         description: this.props.description,
         dueDateTime: this.props.dueDateTime,
         priority: this.props.priority,
-        dueTimeText: this.props.dueDateTime.toLocaleTimeString("pl-pl", {hour: "2-digit", minute: "2-digit"})
     }
 
     convertTodoStateToTodoRequest = () => {
@@ -26,24 +36,9 @@ class TodoModal extends React.Component {
         }
     }
 
-    timePickerCachedData = {
-        hour: null,
-        minute: null
-    }
-
-    componentDidMount() {
-        M.AutoInit()
-    }
-
-    onOpenStart = () => {
+    onDialogOpen = () => {
         const { title, description, dueDateTime, priority} = this.props;
-
-        const dueTimeText = this.props.dueDateTime.toLocaleTimeString("pl-pl", {hour: "2-digit", minute: "2-digit"})
-        this.setState({ title, description, dueDateTime, priority, dueTimeText });
-    }
-
-    handleClick = (e) => {
-        this.props.addTodo(this.convertTodoStateToTodoRequest());
+        this.setState({ title, description, dueDateTime, priority });
     }
 
     handleChange = (e) => {
@@ -53,71 +48,53 @@ class TodoModal extends React.Component {
         });
     }
 
-    handleTime = (e) => {
-        this.handleChange(e)
-        const {id, value} = e.target;
-        const isTimeValid = /^([01]\d|2[0-3]):([0-5]\d)$/.test(value)
-
-        if(isTimeValid) {
-            const hours = value.substring(0,2)
-            const minutes = value.substring(3,5)
-
-            const dueDateTime = new Date(this.state.dueDateTime.getTime());
-            dueDateTime.setHours(hours);
-            dueDateTime.setMinutes(minutes);
-            this.setState({
-                dueDateTime
-            })
-        }
-    }
-
-    handleSubmit = (e) => {
-        e.preventDefault()
-    }
-
-    handleDateChange = (date) => {
-        const oldDueDateTime = this.state.dueDateTime
-        date.setHours(oldDueDateTime.getHours())
-        date.setMinutes(oldDueDateTime.getMinutes())
+    handleDueTimeChange = (dueDateTime) => {
         this.setState({
-            dueDateTime: date
-        })
+            dueDateTime
+        });
+    }
+
+    handlePriorityChange = (e) => {
+        const {value} = e.target;
+
+        this.setState({
+            priority: value
+        });
+    }
+
+    handleSaveClick = () => {
+        this.props.addTodo(this.convertTodoStateToTodoRequest());
+        this.props.onClose()
     }
 
     render() {
-        return (
-            <div>
-                <Modal
-                    open={this.props.isOpen}
-                    actions={[
-                        <Button flat modal="close" node="button">Cancel</Button>,
-                        <Button onClick={this.handleClick} flat modal="close" node="button">Save</Button>
-                    ]}
+        const {classes} = this.props;
 
-                    options={{onCloseEnd : this.props.onClose, onOpenStart: this.onOpenStart}}
-                >
-                    <form onSubmit={this.handleSubmit} autoComplete="off">
-                        <Row>
-                            <TextInput id="title" label="Title" value={this.state.title} onChange={this.handleChange}/>  
-                        </Row>
-                        <Row>
-                            <TextInput id="description" label="Description" value={this.state.description} onChange={this.handleChange}/>  
-                        </Row>
-                        <Row>                           
-                            <DatePicker id="dueDate" label="Due date" options={{autoClose: true, defaultDate: this.state.dueDateTime, setDefaultDate: true}} onChange={this.handleDateChange} />
-                            <TextInput id="dueTimeText" label="Due time" value={this.state.dueTimeText} onChange={this.handleTime}/>  
-                        </Row>
-                        <Row>
-                            <Select id="priority" label="Priority" value={this.state.priority} onChange={this.handleChange}>
-                                <option value="LOW">LOW</option>
-                                <option value="MEDIUM">MEDIUM</option>
-                                <option value="HIGH">HIGH</option>
+        return(
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <Dialog open={this.props.isOpen} onClose={this.props.onClose} onEnter={this.onDialogOpen}> 
+                    <DialogContent className={classes.root}>
+                        <TextField id="title" label="Title" autoComplete="off" value={this.state.title} onChange={this.handleChange}/>
+                        <TextField id="description" label="Description" autoComplete="off" multiline={true} value={this.state.description} onChange={this.handleChange} />
+                        <KeyboardDatePicker margin="normal" label="Due date" format="MM/dd/yyyy" value={this.state.dueDateTime} onChange={this.handleDueTimeChange}/>
+                        <KeyboardTimePicker margin="normal" label="Due time" value={this.state.dueDateTime} onChange={this.handleDueTimeChange}/>
+                        <FormControl >
+                            <InputLabel id="label">Priority</InputLabel>
+                            <Select labelId="label" id="priority" value={this.state.priority} onChange={this.handlePriorityChange}>
+                                <MenuItem value={"LOW"}>LOW</MenuItem>
+                                <MenuItem value={"MEDIUM"}>MEDIUM</MenuItem>
+                                <MenuItem value={"HIGH"}>HIGH</MenuItem>
                             </Select>
-                        </Row>
-                    </form>
-                </Modal>
-            </div>
-        );
+                        </FormControl>
+
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.props.onClose} color="primary">Cancel</Button>
+                        <Button onClick={this.handleSaveClick} color="primary">Save</Button>
+                    </DialogActions>
+                </Dialog>
+            </MuiPickersUtilsProvider>
+        )
     }
     
 }
@@ -128,4 +105,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(TodoModal);
+export default compose(withStyles(useStyles),connect(null, mapDispatchToProps))(TodoModal);
