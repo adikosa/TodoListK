@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { store } from '../store/store';
 
 const instance = axios.create({
     baseURL: 'http://localhost:8080/api/',
@@ -6,9 +7,7 @@ const instance = axios.create({
 });
 
 function getBearerToken() {
-    //todo implement getting credentials from redux?
-    const jsonCredentials = localStorage.getItem('userCredentials');
-    const credentials = jsonCredentials ? JSON.parse(jsonCredentials) : null;
+    const credentials = store.getState().auth.userCredentials;
 
     if (credentials) {
         return 'Bearer ' + credentials.token
