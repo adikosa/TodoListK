@@ -33,6 +33,7 @@ class RegisterUserUseCaseImpl(
         registerData.password = passwordManager.encode(registerData.password)!!
         val uuid = userService.register(registerData)
         val token = jwtTokenManager.createToken(registerData.username)
+        userService.saveUserToken(uuid, token)
 
         emailService.sendEmailActivationMessage(
                 registerData.email,
