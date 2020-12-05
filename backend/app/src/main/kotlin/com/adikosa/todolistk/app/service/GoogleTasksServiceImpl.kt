@@ -23,7 +23,7 @@ class GoogleTasksServiceImpl(
 
     override val oAuthUrl: String
         get() = "https://accounts.google.com/o/oauth2/auth?access_type=online&client_id=$clientId" +
-                "&redirect_uri=$redirectUri&response_type=token"
+                "&redirect_uri=$redirectUri&response_type=token&scope=https://www.googleapis.com/auth/tasks"
 
     override fun getTaskListId(token: String, title: String): String? {
         return googleApiRepository.getTasksLists(token).items.find { list -> list.title == title }?.id
