@@ -23,11 +23,11 @@ class GoogleApiRepositoryImpl(
     }
 
     override fun getTasksLists(token: String): GoogleTasksListsResponse {
-        return restTemplate.request<Nothing, GoogleTasksListsResponse>(token, TASK_LISTS_URL, HttpMethod.GET)
+        return restTemplate.request<Any, GoogleTasksListsResponse>(token, TASK_LISTS_URL, HttpMethod.GET)
     }
 
     override fun deleteTaskList(token: String, taskListId: String) {
-        restTemplate.request<Nothing, String>(token, "$TASK_LISTS_URL/$taskListId", HttpMethod.DELETE)
+        restTemplate.request<Any, Any>(token, "$TASK_LISTS_URL/$taskListId", HttpMethod.DELETE)
     }
 
     override fun addTaskToTaskList(token: String, taskListId: String, createTaskRequest: CreateTaskRequest): CreateTaskResponse {
