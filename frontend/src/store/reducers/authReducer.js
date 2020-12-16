@@ -29,12 +29,13 @@ const authReducer = (state = initState, action) => {
                 authError: null,
                 userCredentials: null
             }
-
+        
+        //ignoring token incoming from backend and forcing user to register email
         case 'REGISTER_SUCCESS':
             return {
                 ...state,
-                authError: null,
-                userCredentials: action.userCredentials
+                authError: 'Confirm your e-mail address and log in to continue',
+                userCredentials: null
             }
 
         case 'REGISTER_ERROR':
