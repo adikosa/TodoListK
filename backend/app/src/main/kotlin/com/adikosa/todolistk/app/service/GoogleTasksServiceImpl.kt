@@ -6,6 +6,8 @@ import com.adikosa.todolistk.network.googleapi.GoogleApiRepository
 import com.adikosa.todolistk.network.model.CreateTaskRequest
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 @Service
 class GoogleTasksServiceImpl(
@@ -42,10 +44,14 @@ class GoogleTasksServiceImpl(
     }
 }
 
+val formatter = DateTimeFormatter
+        .ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        .withZone(ZoneId.of("UTC"))
+
 fun TodoData.toNetwork() = CreateTaskRequest(
         title = title,
         notes = description,
         status = if (isDone) "completed" else "needsAction",
-        due = dueDateTime.toString(),
-        completed = completed.toString()
+        due = formatter.format(dueDateTime).toString(),
+        completed = if (completed == null) null else formatter.format(completed).toString()
 )
