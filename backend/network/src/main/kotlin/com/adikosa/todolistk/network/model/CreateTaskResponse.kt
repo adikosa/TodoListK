@@ -15,7 +15,7 @@ data class CreateTaskResponse(
         val notes: String,
         val status: String,
         val due: String,
-        val completed: String,
+        val completed: String?,
         val deleted: Boolean,
         val hidden: Boolean
 )
