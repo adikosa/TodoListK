@@ -35,10 +35,16 @@ export function post(route, body) {
     return instance.post(route, body)
 }
 
-export function post_with_auth(route, body) {
-    if(body === undefined) {
-        return instance.post(route, {headers: getAuthHeader()})
+export function post_with_auth(route, body, params) {
+
+    if(body === undefined && params === undefined) {
+        return instance.post(route, null, {headers: getAuthHeader()})
     }
+
+    if(body === undefined) {
+        return instance.post(route, null, {headers: getAuthHeader(), params})
+    }
+
     return instance.post(route, body, {headers: getAuthHeader()})
 }
 
