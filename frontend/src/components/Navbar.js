@@ -11,10 +11,6 @@ function Navbar(props){
 
     const links = userCredentials ? <SignedInLinks/> : <SignedOutLinks/>;
 
-    const handleHomeClick = () => {
-        props.history.push('/')
-    }
-
     const useStyles = makeStyles((theme) => ({
         root: {
           flexGrow: 1,
