@@ -1,19 +1,12 @@
 import { Button } from '@material-ui/core'
 import React from 'react'
-import {withRouter} from 'react-router-dom'
+import {Link, withRouter} from 'react-router-dom'
 
 const SignedOutLinks = (props) => {
-    const handleRegisterClick = () => {
-        props.history.push('/register')
-    }
-    const handleLoginClick = () => {
-        props.history.push('/login')
-    }
-
     return (
         <div>
-            <Button onClick={handleRegisterClick} color="inherit">Register</Button>
-            <Button onClick={handleLoginClick} color="inherit">Log In</Button>
+            <Button component={Link} to="/register" color="inherit">Register</Button>
+            <Button component={Link} to="/login" color="inherit">Log In</Button>
         </div>
     )
 }
