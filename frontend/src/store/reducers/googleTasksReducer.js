@@ -25,14 +25,12 @@ const googleTasksReducer = (state = initState, action) => {
         case 'SYNC_TASKS_SUCCESS': {
             return {
                 ...state,
-                oAuthUrl: null,
                 errorMessage: null
             }
         }
         case 'SYNC_TASKS_ERROR':{
             return {
                 ...state,
-                oAuthUrl: null,
                 errorMessage: action.errorMessage.toString()
             }    
         }

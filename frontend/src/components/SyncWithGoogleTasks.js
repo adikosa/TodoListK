@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { compose } from 'redux'
 import {logIn} from '../store/actions/authActions'
-import { syncUserTodos } from '../store/actions/googleTasksActions'
+import { getGoogleTasksOAuthUrl, syncUserTodos } from '../store/actions/googleTasksActions'
 
 const useStyles = theme => ({
     root: {
@@ -28,39 +28,61 @@ class SyncWithGoogleTasks extends React.Component {
         });
     }
 
+    renderSyncingText = () => {
+        return (
+            <div>
+                 <Container fixed>
+                     <h1>
+                         Syncing...
+                     </h1>
+                 </Container>
+                
+            </div>
+     )
+    }
+
+    componentDidMount(){
+        this.props.getGoogleTasksOAuthUrl()
+    }
 
     render() {
-        const {errorMessage} = this.props.googleTasks
+        //TODO add ok message
+        const {oAuthUrl} = this.props;
 
-        if (errorMessage) {
-            console.log("SYNC ERROR", errorMessage)
-            return <Redirect to ="/"/>
+        if(!oAuthUrl){
+            return this.renderSyncingText();
         }
-        
+
         const {userCredentials} = this.props;
 
         if (!userCredentials) {
             return <Redirect to='/login'/>
         }
 
-        const params = new URLSearchParams(this.props.location.hash); 
+        const {errorMessage} = this.props.googleTasks
 
-        const accessToken = params.get("#access_token")
-
-        if (accessToken) {
-            this.props.syncUserTodosWithGoogleTasks(accessToken)
+        if (errorMessage) {
+            return <Redirect to={{
+                pathname: '/',
+                state: { errorMessage }
+            }}/>
         }
 
-        return (
-               <div>
-                    <Container fixed>
-                        <h1>
-                            Syncing...
-                        </h1>
-                    </Container>
-                   
-               </div>
-        )
+        const {hash} = this.props.location;
+
+        const accessToken = new URLSearchParams(hash).get("#access_token")
+
+        if (accessToken && !errorMessage) {
+            this.props.syncUserTodosWithGoogleTasks(accessToken)
+            return this.renderSyncingText()
+        }   
+
+        if (oAuthUrl && !accessToken && !errorMessage) {
+            window.location.href = oAuthUrl
+            return null;
+        }
+
+        return this.renderSyncingText()
     }
 }
 
@@ -68,14 +90,16 @@ const mapStateToProps = (state) => {
     return {
         userCredentials: state.auth.userCredentials,
         authError: state.auth.authError,
-        googleTasks: state.googleTasks
+        googleTasks: state.googleTasks,
+        oAuthUrl: state.googleTasks.oAuthUrl
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         logIn: (user) => dispatch(logIn(user)),
-        syncUserTodosWithGoogleTasks: (token) => dispatch(syncUserTodos(token))
+        syncUserTodosWithGoogleTasks: (token) => dispatch(syncUserTodos(token)),
+        getGoogleTasksOAuthUrl: () => dispatch(getGoogleTasksOAuthUrl())
     }
 }
 
