@@ -8,6 +8,11 @@ spring:
     username: sa
     password:
     driverClassName: org.h2.Driver
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
 
 google:
   client-id: ENC(GAmBuplLJtbDCjC+Oh7Uc/G47mIIyQ3wBttYN6O4NKMcZDueOD2/KkFY9uJmodX0zy2d8bZGizXrhHsGPaNFxleowKey9OEd6b8Mxk2shW2p7J7CvwGYig==)

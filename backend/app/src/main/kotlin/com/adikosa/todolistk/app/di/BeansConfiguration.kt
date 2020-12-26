@@ -20,6 +20,7 @@ import org.springframework.context.annotation.Scope
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
+
 @Configuration
 @EntityScan(basePackages = ["com.adikosa.todolistk.storage"])
 @ComponentScan(basePackages = ["com.adikosa.todolistk.storage", "com.adikosa.todolistk.network"])
