@@ -42,6 +42,22 @@ const todoReducer = (state = initState, action) => {
                 errorMessage: action.errorMessage.toString()
             }    
         }
+        case 'DELETE_TODO_SUCCESS': {
+            const deletedTodoId = action.id
+            
+            const todos = state.todos.filter(todo => todo.id !== deletedTodoId)
+            return {
+                ...state,
+                todos,
+                errorMessage: null
+            }
+        }
+        case 'DELETE_TODO_ERROR':{
+            return {
+                ...state,
+                errorMessage: action.errorMessage.toString()
+            }    
+        }
         default:
             return state;
     }

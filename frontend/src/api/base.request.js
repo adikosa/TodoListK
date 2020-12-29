@@ -36,7 +36,6 @@ export function post(route, body) {
 }
 
 export function post_with_auth(route, body, params) {
-
     if(body === undefined && params === undefined) {
         return instance.post(route, null, {headers: getAuthHeader()})
     }
@@ -48,11 +47,16 @@ export function post_with_auth(route, body, params) {
     return instance.post(route, body, {headers: getAuthHeader()})
 }
 
-export function delete_with_auth(route, body) {
-    if(body === undefined) {
-        return instance.delete(route, {headers: getAuthHeader()})
+export function delete_with_auth(route, body, params) {
+    if(body === undefined && params === undefined) {
+        return instance.delete(route, null, {headers: getAuthHeader()})
     }
-    return instance.delete(route, body, {headers: getAuthHeader()})
+
+    if(body === undefined) {
+        return instance.delete(route, {data: null, headers: getAuthHeader(), params})
+    }
+
+    return instance.delete(route, {data: body, headers: getAuthHeader()})
 }
 
 // function handleResponse(response) {

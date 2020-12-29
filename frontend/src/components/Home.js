@@ -3,7 +3,7 @@ import React from 'react'
 import {connect} from 'react-redux';
 import {Link, Redirect} from 'react-router-dom';
 import {logIn} from '../store/actions/authActions'
-import { addTodo, getTodos } from '../store/actions/todoActions';
+import { addTodo, deleteTodo, getTodos } from '../store/actions/todoActions';
 import AddIcon from '@material-ui/icons/Add';
 import TodoModal from './TodoModal';
 import { compose } from 'redux';
@@ -47,6 +47,10 @@ class Home extends React.Component {
         }))
     }
 
+    handleDeleteClick = (todo) => {
+        this.props.deleteById(todo.id)
+    }
+
     handleAddClick = () => {
         this.setState({
             todoModalData: initModalState
@@ -86,7 +90,7 @@ class Home extends React.Component {
                             </Grid>
                             <Grid item xs={3}>
                                 <Button onClick={() => this.handleEditClick(todo)} color="primary">Edit</Button>    
-                                <Button color="primary">Delete</Button>  
+                                <Button onClick={() => this.handleDeleteClick(todo)} color="primary">Delete</Button>  
                             </Grid>
                         </Grid>
                     </div>
@@ -131,6 +135,7 @@ const mapDispatchToProps = (dispatch) => {
         logIn: (credentials) => dispatch(logIn(credentials)),
         getTodos: () => dispatch(getTodos()),
         addTodo: (todo) => dispatch(addTodo(todo)),
+        deleteById: (id) => dispatch(deleteTodo(id))
     }
 }
 
