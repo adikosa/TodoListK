@@ -15,5 +15,5 @@ function getUserTodos() {
 }
 
 function deleteById(todoId) {
-    return delete_with_auth('/todos/' + todoId, null)
+    return delete_with_auth('/todos', undefined, {todoId})
 }

@@ -23,3 +23,15 @@ export const getTodos = () => {
             })
     }
 }
+
+export const deleteTodo = (id) => {
+    return (dispatch) => {
+        todoRepository.deleteById(id)
+            .then(result => {
+                dispatch({type: 'DELETE_TODO_SUCCESS', id})
+            })
+            .catch((error) => {
+                dispatch({type: 'DELETE_TODO_ERROR', errorMessage: error})
+            })
+    }
+}
