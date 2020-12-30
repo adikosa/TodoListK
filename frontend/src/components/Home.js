@@ -10,6 +10,7 @@ import { compose } from 'redux';
 
 const initModalState = {
     id: null,
+    completed: null,
     title: "",
     description: "",
     priority: "MEDIUM",
@@ -111,13 +112,13 @@ class Home extends React.Component {
 
         const todoTasks = this.tasksToTaskViews(todos.filter(task => task.completed == null))
 
-        const {id, title, description, priority, dueDateTime} = this.state.todoModalData
+        const {id, completed, title, description, priority, dueDateTime} = this.state.todoModalData
 
         const errorMessage = this.props.location.state?.errorMessage
 
         return(
             <Container fixed>
-                <TodoModal isOpen={this.state.isModalOpen} onClose={this.handleModalClose} id={id} title={title} description={description} priority={priority} dueDateTime={dueDateTime}/>
+                <TodoModal isOpen={this.state.isModalOpen} onClose={this.handleModalClose} id={id} title={title} description={description} priority={priority} dueDateTime={dueDateTime} completed={completed}/>
                 {todoTasks ? <Typography variant="h4"> Tasks </Typography> : null} 
                 {todoTasks}
                 {completedTasks ? <Typography variant="h5"> Completed Tasks </Typography> : null} 
