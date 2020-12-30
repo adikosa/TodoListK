@@ -114,7 +114,9 @@ class Home extends React.Component {
 
         const {id, completed, title, description, priority, dueDateTime} = this.state.todoModalData
 
-        const errorMessage = this.props.location.state?.errorMessage
+        const exportErrorMessage = this.props.location.state?.errorMessage
+
+        const todoErrorMessage = this.props.todoErrorMessage
 
         return(
             <Container fixed>
@@ -130,7 +132,8 @@ class Home extends React.Component {
                     Export to Google Tasks
                 </Fab>
                 <Typography align="center" color="error" variant="h6">
-                    {errorMessage ? <p>{errorMessage}</p> : null}
+                    {exportErrorMessage ? <p>{exportErrorMessage}</p> : null}
+                    {todoErrorMessage ? <p>{todoErrorMessage}</p> : null}
                 </Typography>
             </Container>   
         );
@@ -140,7 +143,8 @@ class Home extends React.Component {
 const mapStateToProps = (state) => {
     return {
         userCredentials: state.auth.userCredentials,
-        todos: state.todo.todos
+        todos: state.todo.todos,
+        todoErrorMessage: state.todo.errorMessage
     }
 }
 
