@@ -48,7 +48,7 @@ class TodoServiceImpl(
             description?.let { todo.description = it }
             dueDateTime?.let { todo.dueDateTime = it }
             isDone?.let { todo.isDone = it }
-            completed?.let { todo.completed = it }
+            todo.completed = completed
             priority?.let {
                 val priority = priorityRepository.findByName(it)?: throw RuntimeException("Priority $it not found")
                 todo.priority = priority
