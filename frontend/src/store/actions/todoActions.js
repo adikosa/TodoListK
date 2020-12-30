@@ -35,3 +35,15 @@ export const deleteTodo = (id) => {
             })
     }
 }
+
+export const editTodo = (todo) => {
+    return (dispatch) => {
+        todoRepository.editTodo(todo)
+            .then(result => {
+                dispatch({type: 'EDIT_TODO_SUCCESS', todo: result.data})
+            })
+            .catch((error) => {
+                dispatch({type: 'EDIT_TODO_ERROR', errorMessage: error})
+            })
+    }
+}

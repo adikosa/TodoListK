@@ -6,9 +6,7 @@ const initState = {
 const todoReducer = (state = initState, action) => {
     switch (action.type) {
         case 'ADD_TODO_SUCCESS': {
-            // TODO do it better
-            const {id, title, description, priority, dueDateTime} = action.todo;
-            const todo = {id, title, description, priority, dueDateTime};
+            const {isDone, userId, createdAt, ...todo} = action.todo;
             const todos = [...state.todos, todo];
             return {
                 ...state,
@@ -23,10 +21,8 @@ const todoReducer = (state = initState, action) => {
             };
         }
         case 'GET_TODOS_SUCCESS': {
-            // TODO do it better
             const todos = action.todos.map(rawTodo => {
-                const {id, title, description, priority, dueDateTime} = rawTodo;
-                const todo = {id, title, description, priority, dueDateTime};
+                const {isDone, userId, createdAt, ...todo} = rawTodo;
                 return todo;
             })
 
@@ -53,6 +49,25 @@ const todoReducer = (state = initState, action) => {
             }
         }
         case 'DELETE_TODO_ERROR':{
+            return {
+                ...state,
+                errorMessage: action.errorMessage.toString()
+            }    
+        }
+        case 'EDIT_TODO_SUCCESS': {
+            const {isDone, userId, createdAt, ...todo} = action.todo;
+
+            const editedTodoId = todo.id
+
+            const todos = [...state.todos.filter(todo => todo.id !== editedTodoId), todo]            
+            
+            return {
+                ...state,
+                todos,
+                errorMessage: null
+            }
+        }
+        case 'EDIT_TODO_ERROR':{
             return {
                 ...state,
                 errorMessage: action.errorMessage.toString()

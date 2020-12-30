@@ -3,7 +3,8 @@ import {todoService} from "../api/todo.service";
 export const todoRepository = {
     save,
     getUserTodos,
-    deleteById
+    deleteById,
+    editTodo
 };
 
 function save(todo) {
@@ -16,4 +17,8 @@ function getUserTodos() {
 
 function deleteById(todoId) {
     return todoService.deleteById(todoId)
+}
+
+function editTodo(todo) {
+    return todoService.editTodo(todo)
 }
