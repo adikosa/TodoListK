@@ -18,6 +18,7 @@ class TodoModal extends React.Component {
     
     state = {
         id: this.props.id,
+        completed: this.props.completed,
         title: this.props.description,
         description: this.props.description,
         dueDateTime: this.props.dueDateTime,
@@ -25,8 +26,8 @@ class TodoModal extends React.Component {
     }
 
     onDialogOpen = () => {
-        const { id, title, description, dueDateTime, priority} = this.props;
-        this.setState({ id, title, description, dueDateTime, priority });
+        const { id, completed, title, description, dueDateTime, priority} = this.props;
+        this.setState({ id, completed, title, description, dueDateTime, priority });
     }
 
     handleTextChange = (e) => {
