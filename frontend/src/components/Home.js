@@ -72,6 +72,29 @@ class Home extends React.Component {
         todo.completed = checked ? new Date() : null
         this.props.editTodo(todo)
     }
+
+    taskToView = (todo) => {
+        return(
+            <div key={todo.id}>
+                <Grid container>
+                    <Grid item xs={9}>
+                        <FormControlLabel
+                            control={<Checkbox color="primary" checked={todo.completed ? true : false} onChange={(e) => this.handleCheckboxClick(todo, e.target.checked)}/> }   
+                            label={todo.title}
+                        />
+                    </Grid>
+                    <Grid item xs={3}>
+                        <Button onClick={() => this.handleEditClick(todo)} color="primary">Edit</Button>    
+                        <Button onClick={() => this.handleDeleteClick(todo)} color="primary">Delete</Button>  
+                    </Grid>
+                </Grid>
+            </div>
+        );
+    }
+
+    tasksToTaskViews = (tasks) => {
+        return (tasks.length ? tasks.map(todo => this.taskToView(todo)) : null)
+    }
     
     render() {
         const {userCredentials} = this.props;
@@ -82,28 +105,11 @@ class Home extends React.Component {
 
         const {todos, classes} = this.props;
 
-        const todoList = todos.length ? (
-            todos.map(todo => {
-                return(
-                    <div key={todo.id}>
-                        <Grid container>
-                            <Grid item xs={9}>
-                                <FormControlLabel
-                                    control={<Checkbox color="primary" checked={todo.completed ? true : false} onChange={(e) => this.handleCheckboxClick(todo, e.target.checked)}/> }   
-                                    label={todo.title}
-                                />
-                            </Grid>
-                            <Grid item xs={3}>
-                                <Button onClick={() => this.handleEditClick(todo)} color="primary">Edit</Button>    
-                                <Button onClick={() => this.handleDeleteClick(todo)} color="primary">Delete</Button>  
-                            </Grid>
-                        </Grid>
-                    </div>
-                );
-            })
-        ) : (
-            <div className="center">No todos yet</div>
-        )
+        todos.sort((a, b) => a.dueDateTime > b.dueDateTime ? 1 : -1)
+
+        const completedTasks = this.tasksToTaskViews(todos.filter(task => task.completed !== null))
+
+        const todoTasks = this.tasksToTaskViews(todos.filter(task => task.completed == null))
 
         const {id, title, description, priority, dueDateTime} = this.state.todoModalData
 
@@ -112,8 +118,10 @@ class Home extends React.Component {
         return(
             <Container fixed>
                 <TodoModal isOpen={this.state.isModalOpen} onClose={this.handleModalClose} id={id} title={title} description={description} priority={priority} dueDateTime={dueDateTime}/>
-                <Typography variant="h4"> Tasks </Typography>
-                {todoList}
+                {todoTasks ? <Typography variant="h4"> Tasks </Typography> : null} 
+                {todoTasks}
+                {completedTasks ? <Typography variant="h5"> Completed Tasks </Typography> : null} 
+                {completedTasks}
                 <Fab onClick={this.handleAddClick} color="primary" aria-label="add" className={classes.fabRight}>
                     <AddIcon />
                 </Fab>
