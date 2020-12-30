@@ -17,6 +17,7 @@ const useStyles = theme => ({
 class TodoModal extends React.Component {
     
     state = {
+        id: this.props.id,
         title: this.props.description,
         description: this.props.description,
         dueDateTime: this.props.dueDateTime,
@@ -24,8 +25,8 @@ class TodoModal extends React.Component {
     }
 
     onDialogOpen = () => {
-        const { title, description, dueDateTime, priority} = this.props;
-        this.setState({ title, description, dueDateTime, priority });
+        const { id, title, description, dueDateTime, priority} = this.props;
+        this.setState({ id, title, description, dueDateTime, priority });
     }
 
     handleTextChange = (e) => {

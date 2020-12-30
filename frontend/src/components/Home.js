@@ -3,7 +3,7 @@ import React from 'react'
 import {connect} from 'react-redux';
 import {Link, Redirect} from 'react-router-dom';
 import {logIn} from '../store/actions/authActions'
-import { addTodo, deleteTodo, getTodos } from '../store/actions/todoActions';
+import { addTodo, deleteTodo, editTodo, getTodos } from '../store/actions/todoActions';
 import AddIcon from '@material-ui/icons/Add';
 import TodoModal from './TodoModal';
 import { compose } from 'redux';
@@ -61,11 +61,16 @@ class Home extends React.Component {
 
     handleModalClose = (todo) => {
         if (todo !== undefined){
-            this.props.addTodo(todo)
+            (todo.id) ? this.props.editTodo(todo) : this.props.addTodo(todo)
         }
         this.setState({
             isModalOpen: false
         })
+    }
+
+    handleCheckboxClick = (todo, checked) => {
+        todo.completed = checked ? new Date() : null
+        this.props.editTodo(todo)
     }
     
     render() {
@@ -84,7 +89,7 @@ class Home extends React.Component {
                         <Grid container>
                             <Grid item xs={9}>
                                 <FormControlLabel
-                                    control={<Checkbox color="primary"/>}   
+                                    control={<Checkbox color="primary" checked={todo.completed ? true : false} onChange={(e) => this.handleCheckboxClick(todo, e.target.checked)}/> }   
                                     label={todo.title}
                                 />
                             </Grid>
@@ -135,7 +140,8 @@ const mapDispatchToProps = (dispatch) => {
         logIn: (credentials) => dispatch(logIn(credentials)),
         getTodos: () => dispatch(getTodos()),
         addTodo: (todo) => dispatch(addTodo(todo)),
-        deleteById: (id) => dispatch(deleteTodo(id))
+        deleteById: (id) => dispatch(deleteTodo(id)),
+        editTodo: (todo) => dispatch(editTodo(todo))
     }
 }
 

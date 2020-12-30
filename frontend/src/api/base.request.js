@@ -49,7 +49,7 @@ export function post_with_auth(route, body, params) {
 
 export function delete_with_auth(route, body, params) {
     if(body === undefined && params === undefined) {
-        return instance.delete(route, null, {headers: getAuthHeader()})
+        return instance.delete(route, {data: null, headers: getAuthHeader()})
     }
 
     if(body === undefined) {
@@ -59,6 +59,17 @@ export function delete_with_auth(route, body, params) {
     return instance.delete(route, {data: body, headers: getAuthHeader()})
 }
 
+export function patch_with_auth(route, body, params) {
+    if(body === undefined && params === undefined) {
+        return instance.patch(route, null, {headers: getAuthHeader()})
+    }
+
+    if(body === undefined) {
+        return instance.patch(route, null, {headers: getAuthHeader(), params})
+    }
+
+    return instance.patch(route, body, {headers: getAuthHeader()})
+}
 // function handleResponse(response) {
 //     return response.text().then(text => {
 //         const data = text && JSON.parse(text);
