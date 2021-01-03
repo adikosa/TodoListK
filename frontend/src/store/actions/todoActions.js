@@ -1,8 +1,8 @@
-import {todoRepository} from "../../repository/todo.repository"
+import {todoService} from "../../api/todo.service"
 
 export const addTodo = (todo) => {
     return (dispatch) => {
-        todoRepository.save(todo)
+        todoService.save(todo)
             .then(result => {
                 dispatch({type: 'ADD_TODO_SUCCESS', todo: result.data})
             })
@@ -14,7 +14,7 @@ export const addTodo = (todo) => {
 
 export const getTodos = () => {
     return (dispatch) => {
-        todoRepository.getUserTodos()
+        todoService.getUserTodos()
             .then(result => {
                 dispatch({type: 'GET_TODOS_SUCCESS', todos: result.data})
             })
@@ -26,7 +26,7 @@ export const getTodos = () => {
 
 export const deleteTodo = (id) => {
     return (dispatch) => {
-        todoRepository.deleteById(id)
+        todoService.deleteById(id)
             .then(result => {
                 dispatch({type: 'DELETE_TODO_SUCCESS', id})
             })
@@ -38,7 +38,7 @@ export const deleteTodo = (id) => {
 
 export const editTodo = (todo) => {
     return (dispatch) => {
-        todoRepository.editTodo(todo)
+        todoService.editTodo(todo)
             .then(result => {
                 dispatch({type: 'EDIT_TODO_SUCCESS', todo: result.data})
             })

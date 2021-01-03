@@ -1,8 +1,8 @@
-import {userRepository} from "../../repository/user.repository"
+import {userService} from "../../api/user.service"
 
 export const logIn = (credentials) => {
     return (dispatch) => {
-        userRepository.login(credentials)
+        userService.login(credentials)
             .then(tokenResult => {
                 const userCredentials = {
                     userId: tokenResult.data.id,
@@ -25,7 +25,7 @@ export const logOut = () => {
 
 export const register = (user) => {
     return (dispatch) => {
-        userRepository.register(user)
+        userService.register(user)
             .then(tokenResult => {
                 const userCredentials = {
                     userId: tokenResult.data.id,

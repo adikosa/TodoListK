@@ -1,8 +1,8 @@
-import {googleTasksRepository} from "../../repository/googleTasks.repository"
+import {googleTasksService} from "../../api/googleTasks.service"
 
 export const getGoogleTasksOAuthUrl = () => {
     return (dispatch) => {
-        googleTasksRepository.getOAuthUrl()
+        googleTasksService.getOAuthUrl()
             .then(result => {
                 dispatch({type: 'GET_OAUTH_URL_SUCCESS', oAuthUrl: result.data.url})
             })
@@ -14,7 +14,7 @@ export const getGoogleTasksOAuthUrl = () => {
 
 export const syncUserTodos = (googleTasksToken) => {
     return (dispatch) => {
-        googleTasksRepository.syncUserTodos(googleTasksToken)
+        googleTasksService.syncUserTodos(googleTasksToken)
             .then(result => {
                 dispatch({type: 'SYNC_TASKS_SUCCESS'})
             })
