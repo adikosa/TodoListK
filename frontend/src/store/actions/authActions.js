@@ -17,7 +17,7 @@ export const logIn = (credentials) => {
     }
 }
 
-export const logOut = (id) => {
+export const logOut = () => {
     return (dispatch) => {
         dispatch({type: 'LOGOUT_SUCCESS'})
     }

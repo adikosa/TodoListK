@@ -1,10 +1,21 @@
 import axios from 'axios'
+import { logOut } from '../store/actions/authActions';
 import { store } from '../store/store';
 
 const instance = axios.create({
     baseURL: 'http://localhost:8080/api/',
     headers: {'Content-Type': 'application/json'}
 });
+
+instance.interceptors.response.use(response => {
+    return response;
+ }, error => {
+    const responseStatus = error.response.status
+    if (responseStatus === 401) {
+        store.dispatch(logOut())
+    }
+    return Promise.reject(error);
+ });
 
 function getBearerToken() {
     const credentials = store.getState().auth.userCredentials;
@@ -70,20 +81,3 @@ export function patch_with_auth(route, body, params) {
 
     return instance.patch(route, body, {headers: getAuthHeader()})
 }
-// function handleResponse(response) {
-//     return response.text().then(text => {
-//         const data = text && JSON.parse(text);
-//         if (!response.ok) {
-//             if (response.status === 401) {
-//                 // auto logout if 401 response returned from api
-//                 // logout();
-//                 // location.reload(true);
-//             }
-
-//             const error = (data && data.message) || response.statusText;
-//             return Promise.reject(error);
-//         }
-
-//         return data;
-//     });
-// }
