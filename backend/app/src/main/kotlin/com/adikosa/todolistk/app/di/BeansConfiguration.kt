@@ -11,6 +11,7 @@ import com.adikosa.todolistk.domain.usecases.todos.CreateTodoUseCase
 import com.adikosa.todolistk.domain.usecases.todos.CreateTodoUseCaseImpl
 import com.adikosa.todolistk.domain.usecases.users.*
 import java.util.*
+import java.util.concurrent.Executor
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.context.annotation.Bean
@@ -18,6 +19,7 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Scope
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 
@@ -98,6 +100,17 @@ class BeansConfiguration {
                                                    googleTasksService: GoogleTasksService
     ): SyncUserTodosWithGoogleTasksUseCase {
         return SyncUserTodosWithGoogleTasksUseCaseImpl(currentUser, todoService, googleTasksService)
+    }
+
+    @Bean("googleSyncExecutor")
+    fun googleSyncExecutor(): Executor {
+        return ThreadPoolTaskExecutor().apply {
+            corePoolSize = 1
+            maxPoolSize = 1
+            setQueueCapacity(500)
+            setThreadNamePrefix("GoogleSyncExecutorThread-")
+            initialize()
+        }
     }
 
 }

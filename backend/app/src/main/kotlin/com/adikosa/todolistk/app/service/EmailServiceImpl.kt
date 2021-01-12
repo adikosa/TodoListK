@@ -21,7 +21,7 @@ class EmailServiceImpl(
     @Value("\${mail.username}")
     private lateinit var emailSenderAddress: String
 
-    @Async
+    @Async("emailTaskExecutor")
     override fun sendHtmlMessage(to: String, subject: String, htmlBody: String) {
         try {
             val message = emailSender.createMimeMessage()
@@ -37,7 +37,7 @@ class EmailServiceImpl(
         }
     }
 
-    @Async
+    @Async("emailTaskExecutor")
     override fun sendEmailActivationMessage(to: String, recipientName: String, accountActivationToken: String) {
         val thymeleafContext = Context().apply {
             setVariable(EMAIL_ACTIVATION_GREETINGS_KEY, "Greetings $recipientName, welcome onboard!")

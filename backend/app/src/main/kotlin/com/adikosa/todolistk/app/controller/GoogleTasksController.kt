@@ -4,6 +4,7 @@ import com.adikosa.todolistk.app.model.UrlResponse
 import com.adikosa.todolistk.app.security.IsAuthenticated
 import com.adikosa.todolistk.domain.usecases.users.GetGoogleTasksOAuthUrlUseCase
 import com.adikosa.todolistk.domain.usecases.users.SyncUserTodosWithGoogleTasksUseCase
+import java.util.concurrent.Executor
 import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.ok
 import org.springframework.web.bind.annotation.*
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/googleTasks")
 class GoogleTasksController(
+        private val googleSyncExecutor: Executor,
         private val getGoogleTasksOAuthUrlUseCase: GetGoogleTasksOAuthUrlUseCase,
         private val syncUserTodosWithGoogleTasksUseCase: SyncUserTodosWithGoogleTasksUseCase
 ) {

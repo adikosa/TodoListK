@@ -18,7 +18,7 @@ class DemoDataGenerator(
     override fun run(vararg args: String?) {
         val userRole = roleRepository.save(RoleEntity("ROLE_USER"))
         val user = userRepository.save(UserEntity("Patryk", "Kosieradzki", "admin",
-                "pkos@gmail.com", "\$2a\$10\$BuAAvWEA2gmzC8Uw16Kwt.SIjwygZinf96gw0qYp0RL/FVC7dyzty"))
+                "patryk.kosieradzki@gmail.com", "\$2a\$10\$BuAAvWEA2gmzC8Uw16Kwt.SIjwygZinf96gw0qYp0RL/FVC7dyzty"))
         priorityRepository.save(PriorityEntity("LOW"))
         priorityRepository.save(PriorityEntity("MEDIUM"))
         priorityRepository.save(PriorityEntity("HIGH"))

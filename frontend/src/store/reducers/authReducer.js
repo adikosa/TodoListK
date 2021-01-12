@@ -20,7 +20,7 @@ const authReducer = (state = initState, action) => {
         case 'LOGIN_ERROR':
             return {
                 ...state,
-                authError: action.errorMessage.toString()
+                authError: "Bad credentials, try again"
             }
 
         case 'LOGOUT_SUCCESS':

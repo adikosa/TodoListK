@@ -1,7 +1,9 @@
 package com.adikosa.todolistk.network.googleapi
 
+import com.adikosa.todolistk.network.configuration.AuthorizationHeaderInterceptor
 import com.adikosa.todolistk.network.model.*
 import org.springframework.http.*
+import org.springframework.http.client.ClientHttpRequestInterceptor
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
 
@@ -9,7 +11,8 @@ interface GoogleApiRepository {
     fun createTaskList(token: String, title: String): GoogleTasksListResponse
     fun getTasksLists(token: String): GoogleTasksListsResponse
     fun deleteTaskList(token: String, taskListId: String)
-    fun addTaskToTaskList(token: String, taskListId: String, createTaskRequest: CreateTaskRequest): CreateTaskResponse
+    fun addTaskToTaskList(token: String, taskListId: String, createTaskRequest: CreateNonCompletedTaskRequest): CreateTaskResponse
+    fun addTaskToTaskList(token: String, taskListId: String, createTaskRequest: CreateCompletedTaskRequest): CreateTaskResponse
 }
 
 @Component
@@ -27,11 +30,21 @@ class GoogleApiRepositoryImpl(
     }
 
     override fun deleteTaskList(token: String, taskListId: String) {
-        restTemplate.request<Any, Any>(token, "$TASK_LISTS_URL/$taskListId", HttpMethod.DELETE)
+        restTemplate.deleteWithNoResponse(token, "$TASK_LISTS_URL/$taskListId")
     }
 
-    override fun addTaskToTaskList(token: String, taskListId: String, createTaskRequest: CreateTaskRequest): CreateTaskResponse {
+    override fun addTaskToTaskList(token: String, taskListId: String, createTaskRequest: CreateNonCompletedTaskRequest): CreateTaskResponse {
         return restTemplate.request(token, TASKS_INSERT_URL.format(taskListId), HttpMethod.POST, createTaskRequest)
+    }
+
+    override fun addTaskToTaskList(token: String, taskListId: String, createTaskRequest: CreateCompletedTaskRequest): CreateTaskResponse {
+        return restTemplate.request(token, TASKS_INSERT_URL.format(taskListId), HttpMethod.POST, createTaskRequest)
+    }
+
+    private fun RestTemplate.deleteWithNoResponse(token: String, url: String) {
+        interceptors = listOf(AuthorizationHeaderInterceptor(token))
+
+        delete(url)
     }
 
     private inline fun <REQUEST, reified RESPONSE> RestTemplate.request(

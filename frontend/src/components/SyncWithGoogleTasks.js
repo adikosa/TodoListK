@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { compose } from 'redux'
 import {logIn} from '../store/actions/authActions'
-import { getGoogleTasksOAuthUrl, syncUserTodos } from '../store/actions/googleTasksActions'
+import {getGoogleTasksOAuthUrl, resetSyncUserTodos, syncUserTodos} from '../store/actions/googleTasksActions'
 
 const useStyles = theme => ({
     root: {
@@ -59,7 +59,7 @@ class SyncWithGoogleTasks extends React.Component {
             return <Redirect to='/login'/>
         }
 
-        const {errorMessage} = this.props.googleTasks
+        const {errorMessage, isFinished, isLoading} = this.props.googleTasks
 
         if (errorMessage) {
             return <Redirect to={{
@@ -72,10 +72,19 @@ class SyncWithGoogleTasks extends React.Component {
 
         const accessToken = new URLSearchParams(hash).get("#access_token")
 
-        if (accessToken && !errorMessage) {
-            this.props.syncUserTodosWithGoogleTasks(accessToken)
+        if (isLoading) {
             return this.renderSyncingText()
-        }   
+        } else {
+            if (isFinished) {
+                this.props.resetSyncUserTodos()
+                return <Redirect to={{
+                    pathname: '/',
+                    state: { errorMessage: "Google sync successful" }
+                }}/>
+            } else if (accessToken && !errorMessage) {
+                this.props.syncUserTodosWithGoogleTasks(accessToken)
+            }
+        }
 
         if (oAuthUrl && !accessToken && !errorMessage) {
             window.location.href = oAuthUrl
@@ -99,7 +108,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         logIn: (user) => dispatch(logIn(user)),
         syncUserTodosWithGoogleTasks: (token) => dispatch(syncUserTodos(token)),
-        getGoogleTasksOAuthUrl: () => dispatch(getGoogleTasksOAuthUrl())
+        getGoogleTasksOAuthUrl: () => dispatch(getGoogleTasksOAuthUrl()),
+        resetSyncUserTodos: () => dispatch(resetSyncUserTodos())
     }
 }
 

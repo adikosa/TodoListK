@@ -30,7 +30,7 @@ class EmailConfiguration {
     @Value("\${mail.templates.path}")
     private val mailTemplatesPath: String? = null
 
-    @Bean
+    @Bean("emailTaskExecutor")
     fun emailTaskExecutor(): Executor {
         return ThreadPoolTaskExecutor().apply {
             corePoolSize = 2

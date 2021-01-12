@@ -3,7 +3,8 @@ package com.adikosa.todolistk.app.service
 import com.adikosa.todolistk.domain.model.TodoData
 import com.adikosa.todolistk.domain.services.GoogleTasksService
 import com.adikosa.todolistk.network.googleapi.GoogleApiRepository
-import com.adikosa.todolistk.network.model.CreateTaskRequest
+import com.adikosa.todolistk.network.model.CreateCompletedTaskRequest
+import com.adikosa.todolistk.network.model.CreateNonCompletedTaskRequest
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.time.ZoneId
@@ -40,7 +41,11 @@ class GoogleTasksServiceImpl(
     }
 
     override fun addTodoToTaskList(googleTasksToken: String, taskListId: String, todo: TodoData) {
-        googleApiRepository.addTaskToTaskList(googleTasksToken, taskListId, todo.toNetwork())
+        if (todo.completed != null) {
+            googleApiRepository.addTaskToTaskList(googleTasksToken, taskListId, todo.toNetworkCompleted())
+        } else {
+            googleApiRepository.addTaskToTaskList(googleTasksToken, taskListId, todo.toNetworkNonCompleted())
+        }
     }
 }
 
@@ -48,10 +53,19 @@ val formatter = DateTimeFormatter
         .ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
         .withZone(ZoneId.of("UTC"))
 
-fun TodoData.toNetwork() = CreateTaskRequest(
-        title = title,
-        notes = description,
-        status = if (isDone) "completed" else "needsAction",
-        due = formatter.format(dueDateTime).toString(),
-        completed = if (completed == null) null else formatter.format(completed).toString()
-)
+fun TodoData.toNetworkCompleted(): CreateCompletedTaskRequest {
+    return CreateCompletedTaskRequest(
+            title = title,
+            notes = description,
+            status = if (isDone) "completed" else "needsAction",
+            due = formatter.format(dueDateTime).toString(),
+            completed = formatter.format(completed).toString())
+}
+
+fun TodoData.toNetworkNonCompleted(): CreateNonCompletedTaskRequest {
+    return CreateNonCompletedTaskRequest(
+            title = title,
+            notes = description,
+            status = if (isDone) "completed" else "needsAction",
+            due = formatter.format(dueDateTime).toString())
+}

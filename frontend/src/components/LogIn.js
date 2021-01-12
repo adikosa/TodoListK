@@ -46,7 +46,7 @@ class LogIn extends React.Component {
         }
 
         return (
-               <form onSubmit={this.handleSubmit} className={classes.root} >
+            <form onSubmit={this.handleSubmit} className={classes.root} >
                 <Container maxWidth="sm">
                     <TextField id="username" label="Username" onChange={this.handleChange} variant="outlined"/>
                     <TextField id="password" label="Password" onChange={this.handleChange} variant="outlined" type="password"/>
@@ -55,7 +55,7 @@ class LogIn extends React.Component {
                 <Typography align="center" color="error" variant="h6">
                     {authError ? <p>{authError}</p> : null}
                 </Typography>
-            </form>  
+            </form>
         )
     }
 }
