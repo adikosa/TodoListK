@@ -1,9 +1,11 @@
 import {todoService} from "../../api/todo.service"
+import {openSnackbar} from "./snackbarActions";
 
 export const addTodo = (todo) => {
     return (dispatch) => {
         todoService.save(todo)
             .then(result => {
+                dispatch(openSnackbar("success", "Added new Todo!"))
                 dispatch({type: 'ADD_TODO_SUCCESS', todo: result.data})
             })
             .catch((error) => {
@@ -28,6 +30,7 @@ export const deleteTodo = (id) => {
     return (dispatch) => {
         todoService.deleteById(id)
             .then(result => {
+                dispatch(openSnackbar("success", "Todo removed successfully!"))
                 dispatch({type: 'DELETE_TODO_SUCCESS', id})
             })
             .catch((error) => {
@@ -40,6 +43,7 @@ export const editTodo = (todo) => {
     return (dispatch) => {
         todoService.editTodo(todo)
             .then(result => {
+                dispatch(openSnackbar("success", "Todo updated successfully!"))
                 dispatch({type: 'EDIT_TODO_SUCCESS', todo: result.data})
             })
             .catch((error) => {

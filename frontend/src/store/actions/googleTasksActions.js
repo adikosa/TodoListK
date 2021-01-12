@@ -1,4 +1,5 @@
 import {googleTasksService} from "../../api/googleTasks.service"
+import {openSnackbar} from "./snackbarActions";
 
 export const resetSyncUserTodos = () => {
     return (dispatch) => {
@@ -24,6 +25,7 @@ export const syncUserTodos = (googleTasksToken) => {
 
         googleTasksService.syncUserTodos(googleTasksToken)
             .then(result => {
+                dispatch(openSnackbar("success", "Todos synced with Google Tasks, check out your Google Calendar or Google Tasks App!"))
                 dispatch({type: 'SYNC_TASKS_SUCCESS'})
             })
             .catch((error) => {

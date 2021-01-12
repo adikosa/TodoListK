@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { logOut } from '../store/actions/authActions';
 import { store } from '../store/store';
+import {openSnackbar} from "../store/actions/snackbarActions";
 
 const instance = axios.create({
     baseURL: 'http://localhost:8080/api/',
@@ -10,10 +11,15 @@ const instance = axios.create({
 instance.interceptors.response.use(response => {
     return response;
  }, error => {
+    if (!error.response) {
+        return Promise.reject("Server connection error");
+    }
+
     const responseStatus = error.response.status
     if (responseStatus === 401) {
         store.dispatch(logOut())
     }
+
     return Promise.reject(error);
  });
 

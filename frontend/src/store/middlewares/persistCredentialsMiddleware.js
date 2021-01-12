@@ -8,7 +8,7 @@ export const persistCredentialsMiddleware = () => {
             ) : (
                 localStorage.removeItem("userCredentials")
             );
-            
+
         }
         return result;
     };

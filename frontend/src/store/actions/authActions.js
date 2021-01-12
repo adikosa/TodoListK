@@ -1,4 +1,5 @@
 import {userService} from "../../api/user.service"
+import {openSnackbar} from "./snackbarActions";
 
 export const logIn = (credentials) => {
     return (dispatch) => {
@@ -6,19 +7,29 @@ export const logIn = (credentials) => {
             .then(tokenResult => {
                 const userCredentials = {
                     userId: tokenResult.data.id,
-                    token: tokenResult.data.token
+                    token: tokenResult.data.token,
+                    username: tokenResult.data.username
                 }
+                localStorage.setItem("userCredentials", JSON.stringify(userCredentials))
+                dispatch(openSnackbar("success", "Logged in successfully!"))
                 dispatch({type: 'LOGIN_SUCCESS', userCredentials})
             })
             .catch((error) => {
-                const errorMessage = error
-                dispatch({type: 'LOGIN_ERROR', errorMessage})
+                let errorMessage;
+                if (error.response?.status >= 400 && error.response?.status < 500) {
+                    errorMessage = "Bad username and/or password, try again"
+                } else {
+                    errorMessage = error
+                }
+                dispatch(openSnackbar("error", errorMessage))
             })
     }
 }
 
 export const logOut = () => {
     return (dispatch) => {
+        localStorage.removeItem("userCredentials")
+        dispatch(openSnackbar("success", "Logged out successfully!"))
         dispatch({type: 'LOGOUT_SUCCESS'})
     }
 }
@@ -31,11 +42,18 @@ export const register = (user) => {
                     userId: tokenResult.data.id,
                     token: tokenResult.data.token
                 }
-                dispatch({type: 'REGISTER_SUCCESS', userCredentials})
+                dispatch(openSnackbar("success", "Registered successfully! Please confirm your e-mail address and log in to continue"))
             })
             .catch((error) => {
-                const errorMessage = error
-                dispatch({type: 'REGISTER_ERROR', errorMessage})
+                let errorMessage;
+                if (error.response?.status >= 400 && error.response?.status < 500) {
+                    errorMessage = "Bad username and/or password, try again"
+                } else if (error.response?.status >= 500) {
+                    errorMessage = "Invalid form data or email address is already taken"
+                } else {
+                    errorMessage = error
+                }
+                dispatch(openSnackbar("error", errorMessage))
             })
     }
 }

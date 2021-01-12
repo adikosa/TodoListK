@@ -1,17 +1,40 @@
-import { Button, Container, TextField, Typography, withStyles } from '@material-ui/core'
+import {
+    Avatar,
+    Box,
+    Button,
+    Container,
+    CssBaseline,
+    Grid,
+    Link,
+    TextField,
+    Typography,
+    withStyles
+} from '@material-ui/core'
 import React from 'react'
 import {connect} from 'react-redux'
 import {Redirect} from 'react-router-dom'
 import { compose } from 'redux'
 import {logIn} from '../store/actions/authActions'
+import {Copyright} from "./Copyright";
 
 const useStyles = theme => ({
-    root: {
-      '& .MuiFormControl-root': {
-        width: '100%',
-        margin: theme.spacing(2)
-        }
-    }
+    paper: {
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(1),
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
 })
 
 class LogIn extends React.Component {
@@ -46,16 +69,66 @@ class LogIn extends React.Component {
         }
 
         return (
-            <form onSubmit={this.handleSubmit} className={classes.root} >
-                <Container maxWidth="sm">
-                    <TextField id="username" label="Username" onChange={this.handleChange} variant="outlined"/>
-                    <TextField id="password" label="Password" onChange={this.handleChange} variant="outlined" type="password"/>
-                    <Button type="submit" variant="contained" color="primary" >Log In</Button>
-                </Container>
-                <Typography align="center" color="error" variant="h6">
-                    {authError ? <p>{authError}</p> : null}
-                </Typography>
-            </form>
+            <Container component="main" maxWidth="xs">
+                <CssBaseline />
+                <div className={classes.paper}>
+                    <Avatar className={classes.avatar} />
+                    <Typography component="h1" variant="h5">
+                        Sign in
+                    </Typography>
+                    <Typography component="h1" variant="h6">
+                        with your TodoListK Account
+                    </Typography>
+                    <form className={classes.form} onSubmit={this.handleSubmit} noValidate>
+                        <TextField
+                            id="username"
+                            label="Username"
+                            onChange={this.handleChange}
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            autoComplete="username"
+                            autoFocus
+                        />
+                        <TextField
+                            id="password"
+                            label="Password"
+                            onChange={this.handleChange}
+                            variant="outlined"
+                            type="password"
+                            margin="normal"
+                            required
+                            fullWidth
+                            autoComplete="current-password"
+                        />
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            className={classes.submit}
+                        >
+                            Sign In
+                        </Button>
+                        <Grid container>
+                            <Grid item xs>
+                                <Link href="/password-reset" variant="body2">
+                                    Forgot password?
+                                </Link>
+                            </Grid>
+                            <Grid item>
+                                <Link href="/register" variant="body2">
+                                    {"Don't have an account? Register now"}
+                                </Link>
+                            </Grid>
+                        </Grid>
+                    </form>
+                </div>
+                <Box mt={8}>
+                    <Copyright />
+                </Box>
+            </Container>
         )
     }
 }
@@ -63,7 +136,7 @@ class LogIn extends React.Component {
 const mapStateToProps = (state) => {
     return {
         userCredentials: state.auth.userCredentials,
-        authError: state.auth.authError
+        authError: state.auth.authError,
     }
 }
 

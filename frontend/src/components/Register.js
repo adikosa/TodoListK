@@ -1,17 +1,39 @@
-import { Button, Container, TextField, Typography, withStyles } from '@material-ui/core'
+import {
+    Avatar, Box,
+    Button, Checkbox,
+    Container,
+    CssBaseline,
+    FormControlLabel,
+    Grid, Link,
+    TextField,
+    Typography,
+    withStyles
+} from '@material-ui/core'
 import React from 'react'
 import {connect} from 'react-redux'
 import {Redirect} from 'react-router-dom'
 import { compose } from 'redux'
 import {register} from '../store/actions/authActions'
+import {Copyright} from "./Copyright";
 
 const useStyles = theme => ({
-    root: {
-      '& .MuiFormControl-root': {
-        width: '100%',
-        margin: theme.spacing(2)
-        }
-    }
+    paper: {
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(3),
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
 })
 
 class Register extends React.Component {
@@ -49,19 +71,106 @@ class Register extends React.Component {
         }
 
         return (
-            <form onSubmit={this.handleSubmit} className={classes.root} >
-                <Container maxWidth="sm">
-                    <TextField id="firstName" label="First name" onChange={this.handleChange} variant="outlined"/>
-                    <TextField id="lastName" label="Last name" onChange={this.handleChange} variant="outlined"/>
-                    <TextField id="email" label="Email" onChange={this.handleChange} variant="outlined"/>
-                    <TextField id="username" label="Username" onChange={this.handleChange} variant="outlined"/>
-                    <TextField id="password" label="Password" onChange={this.handleChange} variant="outlined" type="password"/>
-                    <Button type="submit" variant="contained" color="primary" > Register</Button>
-                </Container>
-                <Typography align="center" color="error" variant="h6">
-                    {authError ? <p>{authError}</p> : null}
-                </Typography>
-            </form>           
+            <Container component="main" maxWidth="xs">
+                <CssBaseline />
+                <div className={classes.paper}>
+                    <Avatar className={classes.avatar} />
+                    <Typography component="h1" variant="h5">
+                        Sign up
+                    </Typography>
+                    <form className={classes.form} onSubmit={this.handleSubmit} noValidate>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    autoComplete="fname"
+                                    name="firstName"
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    id="firstName"
+                                    label="First Name"
+                                    onChange={this.handleChange}
+                                    autoFocus
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    id="lastName"
+                                    label="Last Name"
+                                    name="lastName"
+                                    autoComplete="lname"
+                                    onChange={this.handleChange}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    id="username"
+                                    label="Username"
+                                    name="username"
+                                    autoComplete="username"
+                                    onChange={this.handleChange}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    id="email"
+                                    label="Email Address"
+                                    name="email"
+                                    autoComplete="email"
+                                    onChange={this.handleChange}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    name="password"
+                                    label="Password"
+                                    type="password"
+                                    id="password"
+                                    autoComplete="current-password"
+                                    onChange={this.handleChange}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <FormControlLabel
+                                    control={<Checkbox value="allowExtraEmails" color="primary" />}
+                                    label="I want to receive inspiration, marketing promotions and updates via email."
+                                />
+                            </Grid>
+                        </Grid>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            className={classes.submit}
+                        >
+                            Sign Up
+                        </Button>
+                        <Grid container justify="flex-end">
+                            <Grid item>
+                                <Link href="/login" variant="body2">
+                                    Already have an account? Sign in
+                                </Link>
+                            </Grid>
+                        </Grid>
+                    </form>
+                </div>
+                <Box mt={5}>
+                    <Copyright />
+                </Box>
+            </Container>
         )
     }
 }

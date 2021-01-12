@@ -1,4 +1,14 @@
-import { Button, Checkbox, Container, Fab, FormControlLabel, Grid, Typography, withStyles } from '@material-ui/core';
+import {
+    Button,
+    Checkbox,
+    Container,
+    Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
+    Fab,
+    FormControlLabel,
+    Grid,
+    Typography,
+    withStyles
+} from '@material-ui/core';
 import React from 'react'
 import {connect} from 'react-redux';
 import {Link, Redirect} from 'react-router-dom';
@@ -32,9 +42,11 @@ const useStyles = theme => ({
 
 class Home extends React.Component {
     state = {
-        todoModalData : initModalState,
-        isModalOpen : false
-    }
+        todoModalData: initModalState,
+        isModalOpen: false,
+        todoToBeDeleted: '',
+        isDialogOpen: false
+    };
 
     componentDidMount(){
         this.props.getTodos()
@@ -49,7 +61,21 @@ class Home extends React.Component {
     }
 
     handleDeleteClick = (todo) => {
-        this.props.deleteById(todo.id)
+        this.setState({
+            todoToBeDeleted: todo,
+            isDialogOpen: true
+        })
+    }
+
+    handleDialogClose = () => {
+        this.setState({
+            isDialogOpen: false
+        })
+    };
+
+    handleDeleteTodoDefinitely = () => {
+        this.props.deleteById(this.state.todoToBeDeleted.id)
+        this.handleDialogClose()
     }
 
     handleAddClick = () => {
@@ -119,23 +145,47 @@ class Home extends React.Component {
         const todoErrorMessage = this.props.todoErrorMessage
 
         return(
-            <Container fixed>
-                <TodoModal isOpen={this.state.isModalOpen} onClose={this.handleModalClose} id={id} title={title} description={description} priority={priority} dueDateTime={dueDateTime} completed={completed}/>
-                {todoTasks ? <Typography variant="h4"> Tasks </Typography> : null} 
-                {todoTasks}
-                {completedTasks ? <Typography variant="h5"> Completed Tasks </Typography> : null} 
-                {completedTasks}
-                <Fab onClick={this.handleAddClick} color="primary" aria-label="add" className={classes.fabRight}>
-                    <AddIcon />
-                </Fab>
-                <Fab component={Link} to="/syncWithGoogleTasks" variant="extended" color="primary" className={classes.fabLeft}>
-                    Export to Google Tasks
-                </Fab>
-                <Typography align="center" color="error" variant="h6">
-                    {exportErrorMessage ? <p>{exportErrorMessage}</p> : null}
-                    {todoErrorMessage ? <p>{todoErrorMessage}</p> : null}
-                </Typography>
-            </Container>   
+            <div>
+                <Container fixed >
+                    <TodoModal isOpen={this.state.isModalOpen} onClose={this.handleModalClose} id={id} title={title} description={description} priority={priority} dueDateTime={dueDateTime} completed={completed}/>
+                    <Typography variant="h4"> {todoTasks ? "Tasks" : "Nothing \"TODO\" here" }</Typography>
+                    {todoTasks}
+                    {completedTasks ? <Typography variant="h5"> Completed Tasks </Typography> : null}
+                    {completedTasks}
+                    <Fab onClick={this.handleAddClick} color="primary" aria-label="add" className={classes.fabRight}>
+                        <AddIcon />
+                    </Fab>
+                    <Fab component={Link} to="/syncWithGoogleTasks" variant="extended" color="primary" className={classes.fabLeft}>
+                        Export to Google Tasks
+                    </Fab>
+                    <Typography align="center" color="error" variant="h6">
+                        {/*{exportErrorMessage ? <p>{exportErrorMessage}</p> : null}*/}
+                        {todoErrorMessage ? <p>{todoErrorMessage}</p> : null}
+                    </Typography>
+                </Container>
+                <Dialog
+                    open={this.state.isDialogOpen}
+                    onClose={this.handleDialogClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{"Are you sure you want to delete this Todo?"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            It will be deleted permanently.
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleDeleteTodoDefinitely} color="primary" autoFocus>
+                            Yes
+                        </Button>
+                        <Button onClick={this.handleDialogClose} color="primary">
+                            Cancel
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
+
         );
     }
 }

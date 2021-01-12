@@ -4,5 +4,6 @@ import java.util.*
 
 data class TokenResult(
         var id: UUID,
-        var token: String?
+        var token: String?,
+        var username: String? = null
 )
