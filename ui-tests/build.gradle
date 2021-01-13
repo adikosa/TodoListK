@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.4.30-M1'
+}
+
+group 'org.adikosa.todolistk.uitests'
+version '1.0'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+}
+
+dependencies {
+    testImplementation("com.google.truth:truth:1.0")
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile 'com.codeborne:selenide:5.17.3'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}

@@ -79,7 +79,7 @@ class LogIn extends React.Component {
                     <Typography component="h1" variant="h6">
                         with your TodoListK Account
                     </Typography>
-                    <form className={classes.form} onSubmit={this.handleSubmit} noValidate>
+                    <form className={classes.form} onSubmit={this.handleSubmit}>
                         <TextField
                             id="username"
                             label="Username"
@@ -103,6 +103,7 @@ class LogIn extends React.Component {
                             autoComplete="current-password"
                         />
                         <Button
+                            id="login-button"
                             type="submit"
                             fullWidth
                             variant="contained"
