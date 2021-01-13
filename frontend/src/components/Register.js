@@ -1,9 +1,8 @@
 import {
     Avatar, Box,
-    Button, Checkbox,
+    Button,
     Container,
     CssBaseline,
-    FormControlLabel,
     Grid, Link,
     TextField,
     Typography,
@@ -64,7 +63,7 @@ class Register extends React.Component {
     }
 
     render() {
-        const {authError, userCredentials, classes} = this.props;
+        const {userCredentials, classes} = this.props;
 
         if (userCredentials) {
             return <Redirect to='/'/>
@@ -78,7 +77,7 @@ class Register extends React.Component {
                     <Typography component="h1" variant="h5">
                         Sign up
                     </Typography>
-                    <form className={classes.form} onSubmit={this.handleSubmit} noValidate>
+                    <form className={classes.form} onSubmit={this.handleSubmit}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
                                 <TextField
@@ -140,12 +139,6 @@ class Register extends React.Component {
                                     id="password"
                                     autoComplete="current-password"
                                     onChange={this.handleChange}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <FormControlLabel
-                                    control={<Checkbox value="allowExtraEmails" color="primary" />}
-                                    label="I want to receive inspiration, marketing promotions and updates via email."
                                 />
                             </Grid>
                         </Grid>
